@@ -1,0 +1,102 @@
+/* One column of text. The only colour is the link colour. */
+:root {
+  --bg: #fdfdfb;
+  --text: #1f1f1d;
+  --muted: #6b6a66;
+  --rule: #dddcd6;
+  --link: #1d4fa3;
+  --code-bg: #f3f2ee;
+  --sans: 'IBM Plex Sans Variable', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171716;
+    --text: #e4e3de;
+    --muted: #9c9b95;
+    --rule: #34332f;
+    --link: #8db4f0;
+    --code-bg: #222220;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-optical-sizing: auto;
+}
+
+header, main {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+header { padding-top: 2rem; font-size: 0.95rem; }
+header a { color: var(--muted); text-decoration: none; }
+header a:hover { color: var(--text); }
+
+main { padding-top: 2.5rem; padding-bottom: 5rem; }
+
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+a:hover { text-decoration-thickness: 2px; }
+
+h1, h2, h3 { font-weight: 600; line-height: 1.25; }
+h1 { font-size: 1.75rem; margin: 0 0 1.5rem; }
+h2 { font-size: 1.3rem; margin: 2.5rem 0 0.75rem; }
+h3 { font-size: 1.1rem; margin: 2rem 0 0.5rem; }
+
+p, ul, ol, table, pre, blockquote, figure { margin: 0 0 1.1rem; }
+li + li { margin-top: 0.3rem; }
+
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+/* Figures are light-background PNGs; give them a light plate in dark mode too.
+   Inside articles they run wider than the text so chart labels stay legible. */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.75rem 0;
+  background: #fbfbf9;
+}
+article img {
+  width: min(54rem, calc(100vw - 32px));
+  max-width: none;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+@media (prefers-color-scheme: dark) {
+  img { padding: 6px; border-radius: 2px; }
+}
+
+code, pre { font-family: var(--mono); font-size: 0.85em; }
+:not(pre) > code { background: var(--code-bg); padding: 0.1em 0.3em; border-radius: 3px; }
+pre { background: var(--code-bg); padding: 0.9rem 1rem; overflow-x: auto; line-height: 1.45; }
+
+table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+}
+th, td { padding: 0.35rem 0.9rem 0.35rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+th { font-weight: 600; }
+
+blockquote { margin-left: 0; padding-left: 1rem; border-left: 2px solid var(--rule); color: var(--muted); }
+
+.muted { color: var(--muted); }
+.small { font-size: 0.9rem; }

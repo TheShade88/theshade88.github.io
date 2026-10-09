@@ -1,0 +1,32 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Contact from '../../../components/Contact.astro';
+import { getProjects } from '../../../data/content';
+
+export async function getStaticPaths() {
+  const published = new Set((await getProjects()).map((p) => p.id));
+  const reports = await getCollection('reports', (r) => published.has(r.id));
+  return reports.map((report) => ({ params: { id: report.id }, props: { report } }));
+}
+
+const { report } = Astro.props;
+const project = await getEntry('projects', report.id);
+const { Content, headings } = await render(report);
+const title = headings.find((h) => h.depth === 1)?.text ?? 'Technical report';
+---
+
+<Base title={title} description={project?.data.summary} image={project?.data.image}>
+  <p class="muted small">
+    Technical report{project && <> · <a href={`/projects/${report.id}/`}>Read the short version</a></>}
+  </p>
+
+  <article>
+    <Content />
+  </article>
+
+  <hr />
+  <footer class="small">
+    <Contact />
+  </footer>
+</Base>

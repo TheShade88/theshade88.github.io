@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import Contact from '../components/Contact.astro';
+import { site } from '../data/site';
+import { getProjects, monthYear } from '../data/content';
+
+const projects = await getProjects();
+---
+
+<Base home>
+  <h1>{site.name}</h1>
+
+  <!-- DRAFT intro: rewrite in your own words. -->
+  <p>
+    I'm a mechanical engineer. Most of my work is finite element analysis, and a growing part of it is
+    writing code so I do less of it by hand: scripted models, optimisation loops, and language models
+    connected to engineering tools.
+  </p>
+  <p>This is where I write up what I build, with the numbers, including the parts that didn't work.</p>
+
+  <p class="muted small">
+    This site is new and still being built. Projects are up; <a href="/writing/">writing</a> and <a href="/about/">about</a> are under construction.
+  </p>
+
+  <h2>Projects</h2>
+  <ul class="list">
+    {projects.map((p) => (
+      <li>
+        <time datetime={p.data.date.toISOString()}>{monthYear(p.data.date)}</time>
+        <div>
+          <a href={`/projects/${p.id}/`}>{p.data.title}</a>
+          <p class="muted">{p.data.summary}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <h2>Contact</h2>
+  <Contact />
+</Base>
+
+<style>
+  .list { list-style: none; padding: 0; }
+  .list li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0 1rem; margin-bottom: 1.1rem; }
+  .list time { color: var(--muted); font-size: 0.9rem; padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
+  .list p { margin: 0.15rem 0 0; font-size: 0.95rem; }
+  @media (max-width: 30rem) {
+    .list li { grid-template-columns: 1fr; }
+  }
+</style>

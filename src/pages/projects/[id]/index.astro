@@ -1,0 +1,43 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Contact from '../../../components/Contact.astro';
+import { site } from '../../../data/site';
+import { getProjects, monthYear } from '../../../data/content';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { title, summary, date, repo, image } = project.data;
+const report = await getEntry('reports', project.id);
+const { Content } = await render(project);
+---
+
+<Base title={title} description={summary} image={image}>
+  <p class="muted small">
+    {monthYear(date)}
+    {report && <> · <a href={`/projects/${project.id}/report/`}>Technical report</a></>}
+    {repo && <> · <a href={repo}>Code</a></>}
+  </p>
+
+  <article>
+    <Content />
+  </article>
+
+  <hr />
+  <footer class="small">
+    <!-- DRAFT author line: rewrite in your own words. -->
+    <p>
+      Written by {site.name}, a mechanical engineer working on finite element analysis and automation.
+      <a href="/">Other projects</a>.
+    </p>
+    <Contact />
+  </footer>
+</Base>
+
+<style>
+  article :global(h1) { margin-top: 0.25rem; }
+</style>

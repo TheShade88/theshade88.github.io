@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Contact from './Contact.astro';
+
+interface Props {
+  title: string;
+  note: string;
+}
+
+const { title, note } = Astro.props;
+---
+
+<Base title={title}>
+  <h1>{title}</h1>
+  <p class="muted">Under construction. {note}</p>
+  <p>In the meantime, the <a href="/">projects</a> are up.</p>
+  <Contact />
+</Base>
