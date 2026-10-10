@@ -1,21 +1,22 @@
-/* Steel-navy brand colour for the nav and banners, safety orange as a small accent. */
+/* One colour family: deep teal for the nav and banners, bright turquoise as the accent. */
 :root {
-  --bg: #f8f7f3;
+  --bg: #f6f8f7;
   --surface: #ffffff;
-  --text: #1c2430;
-  --muted: #5d6877;
-  --rule: #dfe2e6;
-  --rule-strong: #b9c1cb;
-  --brand: #1f3b5c;
-  --brand-soft: #4f6f94;
-  --brand-ink: #f3f6fa;
-  --accent: #c8551f;
-  --on-accent: #ffffff;
-  --link: #1d5aa0;
-  --tint: #eaf0f6;
-  --stripe: rgba(31, 59, 92, 0.07);
-  --shadow: rgba(31, 59, 92, 0.12);
-  --code-bg: #eff1f4;
+  --text: #172523;
+  --muted: #566a67;
+  --rule: #dce5e3;
+  --rule-strong: #b2c4c1;
+  --brand: #0f4744;
+  --brand-soft: #3f8c86;
+  --brand-ink: #eefaf8;
+  --accent: #2bb3a3;
+  --on-accent: #052220;
+  --accent-ink: #0b766c; /* accent used as text on the page background */
+  --link: #0b6e66;
+  --tint: #e6f2f0;
+  --stripe: rgba(15, 71, 68, 0.07);
+  --shadow: rgba(15, 71, 68, 0.12);
+  --code-bg: #edf2f1;
   --sans: 'IBM Plex Sans Variable', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
   color-scheme: light;
@@ -23,22 +24,23 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #11151b;
-    --surface: #181e26;
-    --text: #e2e6eb;
-    --muted: #9aa4b1;
-    --rule: #2a323d;
-    --rule-strong: #46515f;
-    --brand: #172a40;
-    --brand-soft: #6d8fb6;
-    --brand-ink: #e6edf5;
-    --accent: #f08a4b;
-    --on-accent: #1a1206;
-    --link: #8fbcf0;
-    --tint: #1a2330;
-    --stripe: rgba(143, 188, 240, 0.07);
+    --bg: #0d1514;
+    --surface: #142020;
+    --text: #e0ebe9;
+    --muted: #93a8a5;
+    --rule: #243433;
+    --rule-strong: #3f5654;
+    --brand: #0d2f2d;
+    --brand-soft: #5fb5ab;
+    --brand-ink: #e3f5f2;
+    --accent: #3cc9b8;
+    --on-accent: #04201d;
+    --accent-ink: #5fd6c6;
+    --link: #7fd8cc;
+    --tint: #152523;
+    --stripe: rgba(127, 216, 204, 0.07);
     --shadow: rgba(0, 0, 0, 0.4);
-    --code-bg: #1d242d;
+    --code-bg: #182725;
     color-scheme: dark;
   }
 }
