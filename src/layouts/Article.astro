@@ -1,0 +1,47 @@
+---
+// Layout for long-form pages: project write-ups and technical reports.
+import Base from './Base.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const props = Astro.props;
+---
+
+<Base {...props}>
+  <div class="article-wrap">
+    <nav class="crumbs">
+      <a href="/#projects">← {site.name}</a>
+    </nav>
+    <slot name="meta" />
+    <article class="prose">
+      <slot />
+    </article>
+    <footer class="author">
+      <p>
+        <strong>{site.name}</strong>, {site.role.toLowerCase()}. <a href="/#projects">More projects</a>
+      </p>
+      <p class="links">
+        <a href={site.links.linkedin}><Icon name="linkedin" size={16} /> LinkedIn</a>
+        <a href={site.links.github}><Icon name="github" size={16} /> GitHub</a>
+        {site.email && <a href={`mailto:${site.email}`}><Icon name="mail" size={16} /> Email</a>}
+      </p>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  .article-wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 16px 5rem; }
+  .crumbs { font-size: 0.9rem; margin-bottom: 2.5rem; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs a:hover { color: var(--accent); }
+  .author { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); font-size: 0.95rem; }
+  .author p { margin: 0 0 0.6rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .links a { display: inline-flex; align-items: center; gap: 0.35rem; }
+</style>

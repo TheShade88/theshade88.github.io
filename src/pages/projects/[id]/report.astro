@@ -1,7 +1,6 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
-import Base from '../../../layouts/Base.astro';
-import Contact from '../../../components/Contact.astro';
+import Article from '../../../layouts/Article.astro';
 import { getProjects } from '../../../data/content';
 
 export async function getStaticPaths() {
@@ -16,17 +15,13 @@ const { Content, headings } = await render(report);
 const title = headings.find((h) => h.depth === 1)?.text ?? 'Technical report';
 ---
 
-<Base title={title} description={project?.data.summary} image={project?.data.image}>
-  <p class="muted small">
+<Article title={title} description={project?.data.summary} image={project?.data.image}>
+  <p slot="meta" class="meta">
     Technical report{project && <> · <a href={`/projects/${report.id}/`}>Read the short version</a></>}
   </p>
+  <Content />
+</Article>
 
-  <article>
-    <Content />
-  </article>
-
-  <hr />
-  <footer class="small">
-    <Contact />
-  </footer>
-</Base>
+<style>
+  .meta { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.75rem; }
+</style>

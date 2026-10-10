@@ -1,8 +1,6 @@
 ---
 import { getEntry, render } from 'astro:content';
-import Base from '../../../layouts/Base.astro';
-import Contact from '../../../components/Contact.astro';
-import { site } from '../../../data/site';
+import Article from '../../../layouts/Article.astro';
 import { getProjects, monthYear } from '../../../data/content';
 
 export async function getStaticPaths() {
@@ -11,33 +9,22 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { title, summary, date, repo, image } = project.data;
+const { title, summary, date, repo, image, tags } = project.data;
 const report = await getEntry('reports', project.id);
 const { Content } = await render(project);
 ---
 
-<Base title={title} description={summary} image={image}>
-  <p class="muted small">
-    {monthYear(date)}
-    {report && <> · <a href={`/projects/${project.id}/report/`}>Technical report</a></>}
-    {repo && <> · <a href={repo}>Code</a></>}
+<Article title={title} description={summary} image={image}>
+  <p slot="meta" class="meta">
+    <span>{monthYear(date)}</span>
+    {report && <a href={`/projects/${project.id}/report/`}>Technical report</a>}
+    {repo && <a href={repo}>Code</a>}
+    {tags.length > 0 && <span class="mono">{tags.join(' · ')}</span>}
   </p>
-
-  <article>
-    <Content />
-  </article>
-
-  <hr />
-  <footer class="small">
-    <!-- DRAFT author line: rewrite in your own words. -->
-    <p>
-      Written by {site.name}, a mechanical engineer working on finite element analysis and automation.
-      <a href="/">Other projects</a>.
-    </p>
-    <Contact />
-  </footer>
-</Base>
+  <Content />
+</Article>
 
 <style>
-  article :global(h1) { margin-top: 0.25rem; }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; font-size: 0.85rem; color: var(--muted); margin: 0 0 0.75rem; }
+  .meta .mono { font-size: 0.78rem; color: var(--accent); }
 </style>

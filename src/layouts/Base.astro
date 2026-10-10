@@ -13,7 +13,7 @@ interface Props {
 }
 
 const { title, description = site.description, image, home = false } = Astro.props;
-const fullTitle = title ? `${title} | ${site.name}` : site.name;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.role}`;
 const base = Astro.site ?? Astro.url;
 const canonical = new URL(Astro.url.pathname, base);
 const imageUrl = image && new URL(image, base);
@@ -37,13 +37,6 @@ const imageUrl = image && new URL(image, base);
     <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
   </head>
   <body>
-    {!home && (
-      <header>
-        <a href="/">{site.name}</a>
-      </header>
-    )}
-    <main>
-      <slot />
-    </main>
+    <slot />
   </body>
 </html>
