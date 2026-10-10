@@ -10,13 +10,21 @@ interface Props {
   description?: string;
   image?: string; // path under public/, used for link previews
   home?: boolean;
+  wide?: boolean; // wider column for card grids; articles stay narrow
 }
 
-const { title, description = site.description, image, home = false } = Astro.props;
+const { title, description = site.description, image, home = false, wide = false } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : site.name;
 const base = Astro.site ?? Astro.url;
 const canonical = new URL(Astro.url.pathname, base);
 const imageUrl = image && new URL(image, base);
+
+const path = Astro.url.pathname;
+const tabs = [
+  { href: '/', label: 'Home', active: path === '/' },
+  { href: '/projects/', label: 'Projects', active: path.startsWith('/projects') },
+  { href: '/about/', label: 'About', active: path.startsWith('/about') },
+];
 ---
 
 <!doctype html>
@@ -37,13 +45,22 @@ const imageUrl = image && new URL(image, base);
     <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
   </head>
   <body>
-    {!home && (
-      <header>
-        <a href="/">{site.name}</a>
-      </header>
-    )}
-    <main>
+    <header class="site-header">
+      <nav class="wrap" aria-label="Main">
+        <a class="brand" href="/">{site.name}</a>
+        <ul class="tabs">
+          {tabs.map((t) => (
+            <li><a href={t.href} aria-current={t.active ? 'page' : undefined}>{t.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+    <slot name="hero" />
+    <main class:list={[wide ? 'wrap' : 'narrow']}>
       <slot />
     </main>
+    <footer class="site-footer">
+      <div class="wrap">© {new Date().getFullYear()} {site.name}</div>
+    </footer>
   </body>
 </html>

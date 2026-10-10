@@ -14,6 +14,7 @@ const projects = defineCollection({
     date: z.coerce.date(),
     repo: z.string().url().optional(),
     image: z.string().optional(), // link-preview image under public/, set by the sync script
+    thumbnail: z.string().optional(), // card image under public/; a placeholder shows until set
     draft: z.boolean().default(false),
   }),
 });

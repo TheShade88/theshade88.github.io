@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Placeholder from './Placeholder.astro';
+import { monthYear } from '../data/content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, summary, date, thumbnail } = project.data;
+---
+
+<li class="card">
+  <a href={`/projects/${project.id}/`}>
+    <Placeholder src={thumbnail} alt="" label="Project thumbnail" />
+    <div class="body">
+      <time datetime={date.toISOString()}>{monthYear(date)}</time>
+      <h3>{title}</h3>
+      <p>{summary}</p>
+    </div>
+  </a>
+</li>
+
+<style>
+  .card { margin: 0; }
+  .card > a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+  .card > a:hover { border-color: var(--brand-soft); box-shadow: 0 6px 20px var(--shadow); transform: translateY(-2px); }
+  .card :global(.ph), .card :global(.ph-img) { border-radius: 0; border-width: 0 0 1px; }
+  .body { padding: 0.9rem 1rem 1.1rem; }
+  time { font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  h3 { margin: 0.2rem 0 0.4rem; font-size: 1.05rem; color: var(--link); }
+  p { margin: 0; font-size: 0.92rem; color: var(--muted); }
+</style>

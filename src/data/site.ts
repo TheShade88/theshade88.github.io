@@ -9,4 +9,7 @@ export const site = {
     github: 'https://github.com/TheShade88',
   },
   hasResume: false, // put the PDF at public/resume.pdf, then set true
+  // Images under public/. Leave empty to show a placeholder box instead.
+  photo: '', // portrait, roughly square, e.g. '/photo.jpg'
+  heroImage: '', // wide background for the home banner, e.g. '/hero.jpg'
 };

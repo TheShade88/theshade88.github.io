@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects } from '../../data/content';
+
+const projects = await getProjects();
+---
+
+<Base title="Projects" description="Engineering projects, written up with the numbers." wide>
+  <h1>Projects</h1>
+  <p class="muted intro">Each project has a short write-up, and most have a longer technical report with the full method and results.</p>
+  <ul class="cards">
+    {projects.map((p) => <ProjectCard project={p} />)}
+  </ul>
+</Base>
+
+<style>
+  .intro { max-width: 40rem; }
+</style>
