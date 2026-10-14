@@ -1,21 +1,20 @@
-/* One colour family: deep teal for the nav and banners, bright turquoise as the accent. */
+/* One colour family: deep teal for the header and side panel, bright turquoise for highlights.
+   --accent is the text-safe teal used for links and tags; --highlight is the bright one for fills. */
 :root {
+  --header-h: 3.7rem; /* header height incl. border; pinned on wide screens */
   --bg: #f6f8f7;
   --surface: #ffffff;
   --text: #172523;
   --muted: #566a67;
   --rule: #dce5e3;
   --rule-strong: #b2c4c1;
+  --accent: #0b6e66;
+  --highlight: #2bb3a3;
+  --on-highlight: #052220;
   --brand: #0f4744;
-  --brand-soft: #3f8c86;
   --brand-ink: #eefaf8;
-  --accent: #2bb3a3;
-  --on-accent: #052220;
-  --accent-ink: #0b766c; /* accent used as text on the page background */
-  --link: #0b6e66;
   --tint: #e6f2f0;
   --stripe: rgba(15, 71, 68, 0.07);
-  --shadow: rgba(15, 71, 68, 0.12);
   --code-bg: #edf2f1;
   --sans: 'IBM Plex Sans Variable', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
@@ -30,121 +29,88 @@
     --muted: #93a8a5;
     --rule: #243433;
     --rule-strong: #3f5654;
+    --accent: #7fd8cc;
+    --highlight: #3cc9b8;
+    --on-highlight: #04201d;
     --brand: #0d2f2d;
-    --brand-soft: #5fb5ab;
     --brand-ink: #e3f5f2;
-    --accent: #3cc9b8;
-    --on-accent: #04201d;
-    --accent-ink: #5fd6c6;
-    --link: #7fd8cc;
     --tint: #152523;
     --stripe: rgba(127, 216, 204, 0.07);
-    --shadow: rgba(0, 0, 0, 0.4);
     --code-bg: #182725;
     color-scheme: dark;
   }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
   margin: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
   font-size: 1.0625rem;
   line-height: 1.6;
-  font-optical-sizing: auto;
 }
 
-.wrap, .narrow { width: 100%; margin-left: auto; margin-right: auto; padding-left: 16px; padding-right: 16px; }
-.wrap { max-width: 64rem; }
-.narrow { max-width: 40rem; }
-
-main { flex: 1; padding-top: 2.5rem; padding-bottom: 5rem; }
-
-/* Site header with tabs */
-.site-header { background: var(--brand); color: var(--brand-ink); border-bottom: 3px solid var(--accent); }
-.site-header nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 1rem; min-height: 3.5rem; }
-.site-header .brand { color: var(--brand-ink); font-weight: 600; text-decoration: none; letter-spacing: 0.01em; padding: 0.6rem 0; }
-.tabs { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
-.tabs li + li { margin-top: 0; }
-.tabs a {
-  display: block;
-  padding: 0.4rem 0.85rem;
-  border-radius: 999px;
-  color: var(--brand-ink);
-  opacity: 0.8;
-  text-decoration: none;
-  font-size: 0.95rem;
-}
-.tabs a:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
-.tabs a[aria-current='page'] { opacity: 1; background: var(--accent); color: var(--on-accent); font-weight: 600; }
-
-.site-footer { background: var(--tint); border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.85rem; padding: 1.25rem 0; }
-
-a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
 a:hover { text-decoration-thickness: 2px; }
 
 h1, h2, h3 { font-weight: 600; line-height: 1.25; }
-h2 { color: var(--brand); }
-@media (prefers-color-scheme: dark) { h2 { color: var(--brand-ink); } }
-h1 { font-size: 1.75rem; margin: 0 0 1.5rem; }
-h2 { font-size: 1.3rem; margin: 2.5rem 0 0.75rem; }
-h3 { font-size: 1.1rem; margin: 2rem 0 0.5rem; }
 
-p, ul, ol, table, pre, blockquote, figure { margin: 0 0 1.1rem; }
-li + li { margin-top: 0.3rem; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); }
 
-hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
-
-/* Figures are light-background PNGs; give them a light plate in dark mode too.
-   Inside articles they run wider than the text so chart labels stay legible. */
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin: 1.75rem 0;
-  background: #fbfbf9;
+/* ── Site header with tabs (every page) ──────────────────────────────────── */
+.site-header { background: var(--brand); color: var(--brand-ink); border-bottom: 3px solid var(--highlight); }
+.site-header nav {
+  max-width: 72rem; margin: 0 auto; padding: 0 16px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.25rem 1rem; min-height: 3.5rem;
 }
-article img {
-  width: min(54rem, calc(100vw - 32px));
+.site-header .brand { color: var(--brand-ink); font-weight: 600; text-decoration: none; padding: 0.6rem 0; }
+.tabs { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+.tabs a {
+  display: block; padding: 0.4rem 0.85rem; border-radius: 999px;
+  color: var(--brand-ink); opacity: 0.8; text-decoration: none; font-size: 0.95rem;
+}
+.tabs a:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
+.tabs a.active { opacity: 1; background: var(--highlight); color: var(--on-highlight); font-weight: 600; }
+@media (min-width: 64rem) {
+  .site-header { position: sticky; top: 0; z-index: 10; }
+  .site-header nav { padding: 0 3rem; }
+}
+
+/* ── Long-form text (project write-ups, reports) ─────────────────────────── */
+.prose h1 { font-size: 2rem; margin: 0 0 1.5rem; letter-spacing: -0.01em; }
+.prose h2 { font-size: 1.35rem; margin: 2.75rem 0 0.75rem; }
+.prose h3 { font-size: 1.1rem; margin: 2rem 0 0.5rem; }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre, .prose blockquote { margin: 0 0 1.1rem; }
+.prose li + li { margin-top: 0.3rem; }
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+/* Figures are light-background PNGs: keep them on a light plate in dark mode,
+   and let them run wider than the text so chart labels stay legible. */
+.prose img {
+  display: block;
+  height: auto;
+  margin: 2rem 0;
+  background: #fbfbf9;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  width: min(56rem, calc(100vw - 32px));
   max-width: none;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
 }
-@media (prefers-color-scheme: dark) {
-  img { padding: 6px; border-radius: 2px; }
-}
 
-code, pre { font-family: var(--mono); font-size: 0.85em; }
-:not(pre) > code { background: var(--code-bg); padding: 0.1em 0.3em; border-radius: 3px; }
-pre { background: var(--code-bg); padding: 0.9rem 1rem; overflow-x: auto; line-height: 1.45; }
+.prose code, .prose pre { font-family: var(--mono); font-size: 0.85em; }
+.prose :not(pre) > code { background: var(--code-bg); padding: 0.1em 0.3em; border-radius: 3px; }
+.prose pre { background: var(--code-bg); padding: 0.9rem 1rem; overflow-x: auto; line-height: 1.45; border-radius: 4px; }
 
-table {
-  border-collapse: collapse;
-  display: block;
-  overflow-x: auto;
-  font-size: 0.9em;
-  font-variant-numeric: tabular-nums;
-}
-th, td { padding: 0.35rem 0.9rem 0.35rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
-th { font-weight: 600; }
-
-blockquote { margin-left: 0; padding-left: 1rem; border-left: 3px solid var(--accent); color: var(--muted); }
-
-.muted { color: var(--muted); }
-.small { font-size: 0.9rem; }
-
-/* Section heading with an accent bar, used on the home and about pages */
-.section-title { display: flex; align-items: center; gap: 0.6rem; }
-.section-title::before { content: ''; width: 0.3rem; height: 1.1em; background: var(--accent); border-radius: 2px; }
-
-.cards { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1.25rem; }
-.cards li + li { margin-top: 0; }
+.prose table { border-collapse: collapse; display: block; overflow-x: auto; font-size: 0.92em; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: 0.4rem 1rem 0.4rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.prose th { font-weight: 600; }
+.prose blockquote { margin-left: 0; padding-left: 1rem; border-left: 3px solid var(--highlight); color: var(--muted); }

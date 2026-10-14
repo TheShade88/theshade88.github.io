@@ -1,102 +1,327 @@
 ---
 import Base from '../layouts/Base.astro';
-import Contact from '../components/Contact.astro';
+import Icon from '../components/Icon.astro';
 import Placeholder from '../components/Placeholder.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { site } from '../data/site';
+import { site, about, experience, education, skills, moreProjects, writing } from '../data/site';
 import { getProjects } from '../data/content';
 
 const projects = await getProjects();
-const featured = projects.slice(0, 3);
+const sections = [
+  { id: 'about', label: 'About' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'writing', label: 'Writing' },
+];
 ---
 
-<Base home wide>
-  <section slot="hero" class:list={['hero', { 'hero-empty': !site.heroImage }]} style={site.heroImage ? `--hero-img: url('${site.heroImage}')` : undefined}>
-    <div class="wrap hero-inner">
-      <div class="photo">
-        <Placeholder src={site.photo} alt={site.name} label="Your photo" ratio="1 / 1" round />
-      </div>
+<Base home tab="home">
+  <div class="page">
+    <!-- Left column: fixed on wide screens, at the top on phones -->
+    <header
+      class:list={['side', { 'side-empty': !site.heroImage }]}
+      style={site.heroImage ? `--hero-img: url('${site.heroImage}')` : undefined}
+    >
       <div>
-        <h1>{site.name}</h1>
-        <p class="tagline">{site.description}</p>
-        <p class="actions">
-          <a class="btn primary" href="/projects/">See projects</a>
-          <a class="btn" href="/about/">About me</a>
-        </p>
+        <div class="photo">
+          <Placeholder src={site.photo} alt={site.name} label="Your photo" ratio="1 / 1" round />
+        </div>
+        <h1><a href="/">{site.name}</a></h1>
+        <p class="role">{site.role}</p>
+        <p class="tagline">{site.tagline}</p>
+
+        <nav class="toc" aria-label="Sections">
+          <ul>
+            {sections.map((s) => (
+              <li><a href={`#${s.id}`} data-section={s.id}><span class="line"></span>{s.label}</a></li>
+            ))}
+          </ul>
+        </nav>
       </div>
-    </div>
-    {!site.heroImage && <span class="hero-label">Background image placeholder</span>}
-  </section>
 
-  <div class="prose">
-    <!-- DRAFT intro: rewrite in your own words. -->
-    <p>
-      I'm a mechanical engineer. Most of my work is finite element analysis, and a growing part of it is
-      writing code so I do less of it by hand: scripted models, optimisation loops, and language models
-      connected to engineering tools.
-    </p>
-    <p>This is where I write up what I build, with the numbers, including the parts that didn't work.</p>
+      <ul class="social">
+        <li><a href={site.links.github} aria-label="GitHub" title="GitHub"><Icon name="github" /></a></li>
+        <li><a href={site.links.linkedin} aria-label="LinkedIn" title="LinkedIn"><Icon name="linkedin" /></a></li>
+        {site.email && <li><a href={`mailto:${site.email}`} aria-label="Email" title="Email"><Icon name="mail" /></a></li>}
+        {site.resume && <li><a href={site.resume} aria-label="Resume (PDF)" title="Resume (PDF)"><Icon name="file" /></a></li>}
+      </ul>
+      {!site.heroImage && <span class="hero-label">Background image placeholder</span>}
+    </header>
+
+    <!-- Right column: scrolls -->
+    <main class="content">
+      <section id="about" aria-label="About">
+        <h2 class="section-title">About</h2>
+        {about.map((p) => <p>{p}</p>)}
+      </section>
+
+      <section id="experience" aria-label="Experience">
+        <h2 class="section-title">Experience</h2>
+        <ol class="items">
+          {experience.map((e) => (
+            <li class="item">
+              <div class="when">{e.dates}</div>
+              <div>
+                <h3>
+                  {e.role} · {e.url ? <a href={e.url}>{e.company}</a> : e.company}
+                </h3>
+                <p>{e.summary}</p>
+                {e.skills && <p class="tags">{e.skills.map((s) => <span>{s}</span>)}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        {education.length > 0 && (
+          <>
+            <h3 class="subhead">Education</h3>
+            <ol class="items compact">
+              {education.map((e) => (
+                <li class="item">
+                  <div class="when">{e.dates}</div>
+                  <div>
+                    <h3>{e.degree} · {e.school}</h3>
+                    {e.note && <p>{e.note}</p>}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </>
+        )}
+
+        {skills.length > 0 && (
+          <>
+            <h3 class="subhead">Skills</h3>
+            <dl class="skills">
+              {skills.map((g) => (
+                <div>
+                  <dt>{g.group}</dt>
+                  <dd>{g.items.join(', ')}</dd>
+                </div>
+              ))}
+            </dl>
+          </>
+        )}
+
+        {site.resume && (
+          <p class="more"><a href={site.resume}>View full résumé <Icon name="arrow" size={14} /></a></p>
+        )}
+      </section>
+
+      <section id="projects" aria-label="Projects">
+        <h2 class="section-title">Projects</h2>
+        <ol class="projects">
+          {projects.map((p) => (
+            <li class="project">
+              <div class="thumb">
+                <Placeholder src={p.data.thumbnail ?? p.data.image} alt="" label="Thumbnail" ratio="2 / 1" />
+              </div>
+              <div>
+                <h3><a class="stretch" href={`/projects/${p.id}/`}>{p.data.title}</a></h3>
+                <p>{p.data.summary}</p>
+                {p.data.metric && <p class="metric">{p.data.metric}</p>}
+                {p.data.tags.length > 0 && <p class="tags">{p.data.tags.map((t) => <span>{t}</span>)}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        {moreProjects.length > 0 && (
+          <>
+            <h3 class="subhead">Smaller projects</h3>
+            <ol class="items compact">
+              {moreProjects.map((m) => (
+                <li class="item">
+                  <div class="when">{m.year}</div>
+                  <div>
+                    <h3>{m.url ? <a href={m.url}>{m.title}</a> : m.title}</h3>
+                    <p>{m.summary}</p>
+                    {m.tags && <p class="tags">{m.tags.map((t) => <span>{t}</span>)}</p>}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </>
+        )}
+      </section>
+
+      <section id="writing" aria-label="Writing">
+        <h2 class="section-title">Writing</h2>
+        {writing.length > 0 ? (
+          <ol class="items compact">
+            {writing.map((w) => (
+              <li class="item">
+                <div class="when">{w.year}</div>
+                <div><h3><a href={w.url}>{w.title}</a></h3></div>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="muted">Nothing here yet. Posts will be listed here as they go out.</p>
+        )}
+      </section>
+
+      <footer class="colophon">
+        <p>Built with Astro and hosted on GitHub Pages. Set in IBM Plex Sans.</p>
+      </footer>
+    </main>
   </div>
-
-  <h2 class="section-title">Recent projects</h2>
-  <ul class="cards">
-    {featured.map((p) => <ProjectCard project={p} />)}
-  </ul>
-  {projects.length > featured.length && <p><a href="/projects/">All projects →</a></p>}
-
-  <h2 class="section-title">Contact</h2>
-  <Contact />
 </Base>
 
+<script>
+  // Highlight the section currently on screen, in the sidebar and in the header tabs.
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>('.toc a')].map((a) => [a.dataset.section, a]),
+  );
+  const tabs = [...document.querySelectorAll<HTMLAnchorElement>('.tabs a')];
+  // Which header tab each section belongs to.
+  const tabFor: Record<string, string> = { about: 'about', experience: 'about', projects: 'projects', writing: 'projects' };
+  let current = 'about';
+  const setTab = () => {
+    const id = window.scrollY < 80 ? 'home' : tabFor[current];
+    tabs.forEach((a) => a.classList.toggle('active', a.dataset.tab === id));
+  };
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        current = entry.target.id;
+        links.forEach((a) => a.classList.remove('active'));
+        links.get(current)?.classList.add('active');
+        setTab();
+      }
+    },
+    { rootMargin: '-35% 0px -60% 0px' },
+  );
+  document.querySelectorAll('main section[id]').forEach((s) => observer.observe(s));
+  window.addEventListener('scroll', setTab, { passive: true });
+</script>
+
 <style>
-  .hero {
+  .page {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* ── Sidebar: a teal panel; holds the background image ── */
+  .side {
     position: relative;
+    margin: 0 -16px;
+    padding: 2.5rem 16px 2.75rem;
     color: var(--brand-ink);
     background:
-      linear-gradient(120deg, rgba(8, 46, 44, 0.88), rgba(15, 71, 68, 0.6)),
+      linear-gradient(160deg, rgba(8, 46, 44, 0.9), rgba(15, 71, 68, 0.65)),
       var(--hero-img) center / cover no-repeat,
       var(--brand);
   }
   /* Until a background image is set: a blueprint-style grid fills the space. */
-  .hero-empty {
+  .side-empty {
     background:
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 32px),
       repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 32px),
-      linear-gradient(120deg, #0a3533, #17706a);
+      linear-gradient(160deg, #0a3533, #17706a);
   }
-  .hero-inner { display: flex; align-items: center; gap: 2rem; padding-top: 3.5rem; padding-bottom: 3.5rem; }
-  .photo { flex: 0 0 9rem; }
-  .photo :global(.ph) { color: var(--brand-ink); border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.08); }
-  .photo :global(.ph-img) { border: 3px solid var(--brand-ink); }
-  h1 { margin: 0 0 0.4rem; font-size: 2.2rem; }
-  .tagline { margin: 0 0 1.25rem; font-size: 1.1rem; opacity: 0.9; max-width: 34rem; }
-  .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0; }
-  .btn {
-    display: inline-block;
-    padding: 0.45rem 1rem;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.55);
-    color: var(--brand-ink);
-    text-decoration: none;
-    font-size: 0.95rem;
-  }
-  .btn:hover { background: rgba(255, 255, 255, 0.12); }
-  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
-  .btn.primary:hover { filter: brightness(1.08); }
   .hero-label {
-    position: absolute;
-    right: 16px;
-    bottom: 0.6rem;
-    font-size: 0.75rem;
-    opacity: 0.6;
-    border: 1px dashed currentColor;
-    border-radius: 4px;
-    padding: 0.1rem 0.5rem;
+    position: absolute; right: 16px; bottom: 0.75rem;
+    font-size: 0.72rem; opacity: 0.6;
+    border: 1px dashed currentColor; border-radius: 4px; padding: 0.1rem 0.5rem;
   }
-  .prose { max-width: 40rem; }
-  @media (max-width: 36rem) {
-    .hero-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; padding-top: 2.25rem; padding-bottom: 3rem; }
-    .photo { flex-basis: auto; width: 7rem; }
-    h1 { font-size: 1.8rem; }
+  .photo { width: 96px; margin-bottom: 1.25rem; }
+  .photo :global(.ph) {
+    color: var(--brand-ink); font-size: 0.7rem;
+    border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.08);
+  }
+  .photo :global(.ph-img) { border: 3px solid var(--brand-ink); }
+  h1 { font-size: clamp(2.1rem, 5vw, 2.9rem); margin: 0; letter-spacing: -0.02em; }
+  h1 a { color: inherit; text-decoration: none; }
+  .role { font-size: 1.15rem; font-weight: 500; margin: 0.4rem 0 0; color: var(--highlight); }
+  .tagline { opacity: 0.85; max-width: 22rem; margin: 0.9rem 0 0; }
+
+  .toc { display: none; }
+  .toc ul, .social { list-style: none; padding: 0; margin: 0; }
+  .toc a {
+    display: inline-flex; align-items: center; gap: 1rem; padding: 0.55rem 0;
+    color: var(--brand-ink); opacity: 0.65; text-decoration: none;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .toc .line { display: inline-block; width: 2rem; height: 1px; background: currentColor; transition: width 0.15s; }
+  .toc a:hover, .toc a.active { opacity: 1; }
+  .toc a:hover .line, .toc a.active .line { width: 4rem; }
+  .toc a.active .line { background: var(--highlight); height: 2px; }
+
+  .social { display: flex; gap: 1.25rem; margin-top: 2rem; }
+  .social a { color: var(--brand-ink); opacity: 0.75; display: block; }
+  .social a:hover { opacity: 1; color: var(--highlight); }
+
+  /* ── Content ─────────────────────────────────────────── */
+  section { padding-top: 3.5rem; scroll-margin-top: 1rem; }
+  .section-title {
+    color: var(--accent);
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    margin: 0 0 1.5rem;
+    position: sticky; top: 0; z-index: 1;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(6px);
+    padding: 0.9rem 0;
+  }
+  section > p { margin: 0 0 1rem; color: var(--muted); }
+
+  .items, .projects { list-style: none; padding: 0; margin: 0; }
+  .item { display: grid; grid-template-columns: 1fr; gap: 0.25rem 1.5rem; margin-bottom: 2.25rem; }
+  .compact .item { margin-bottom: 1.25rem; }
+  .when {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted); padding-top: 0.3rem; font-variant-numeric: tabular-nums;
+  }
+  .item h3, .project h3 { font-size: 1rem; font-weight: 600; margin: 0 0 0.35rem; }
+  .item p, .project p { margin: 0 0 0.5rem; color: var(--muted); font-size: 0.95rem; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; }
+  .tags span { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); }
+
+  .subhead { font-size: 0.95rem; margin: 2.5rem 0 1rem; }
+  .skills { margin: 0; }
+  .skills div { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; margin-bottom: 0.5rem; font-size: 0.95rem; }
+  .skills dt { font-weight: 600; }
+  .skills dd { margin: 0; color: var(--muted); }
+  .more { margin-top: 2rem; }
+  .more a { font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; }
+
+  /* Project rows: the whole row is clickable via the stretched title link. */
+  .project {
+    position: relative;
+    display: grid; grid-template-columns: 1fr; gap: 1rem;
+    margin: 0 -1rem 1.5rem; padding: 1rem;
+    border-radius: 6px; transition: background 0.15s;
+  }
+  .project:hover { background: var(--surface); box-shadow: inset 3px 0 0 var(--highlight); }
+  .thumb { width: 100%; max-width: 200px; }
+  .thumb :global(.ph-img) { border: 1px solid var(--rule); border-radius: 4px; background: #fbfbf9; }
+  .thumb :global(.ph) { border-radius: 4px; font-size: 0.72rem; }
+  .stretch { color: var(--text); text-decoration: none; }
+  .stretch::after { content: ''; position: absolute; inset: 0; }
+  .project:hover .stretch { color: var(--accent); }
+  .project .metric { font-weight: 500; color: var(--text); }
+
+  .colophon { padding: 4rem 0 3rem; font-size: 0.85rem; color: var(--muted); }
+
+  /* ── Wide screens: split layout ──────────────────────── */
+  @media (min-width: 64rem) {
+    /* The panel runs to the left edge of the window; text lines up with the header. */
+    .page { display: grid; grid-template-columns: 1fr 1.25fr; gap: 4rem; max-width: none; padding: 0; }
+    .side {
+      position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h));
+      display: flex; flex-direction: column; justify-content: space-between;
+      margin: 0;
+      padding: 5rem 3rem 4rem max(3rem, calc((100vw - 72rem) / 2 + 3rem));
+    }
+    .content { padding-right: max(3rem, calc((100vw - 72rem) / 2 + 3rem)); }
+    .toc { display: block; margin-top: 4rem; }
+    .content { padding-top: 4.5rem; }
+    section { padding-top: 0; margin-bottom: 6rem; scroll-margin-top: calc(var(--header-h) + 3rem); }
+    .section-title { position: static; background: none; backdrop-filter: none; padding: 0; }
+    .item { grid-template-columns: 7.5rem 1fr; }
+    .project { grid-template-columns: 9.5rem 1fr; gap: 1.25rem; }
+    .thumb { margin-top: 0.2rem; }
   }
 </style>

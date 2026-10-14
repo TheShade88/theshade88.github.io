@@ -16,6 +16,9 @@ const projects = [
       title: "What a fruit fly's taste buds can tell you about steel",
       summary: 'A simulated fruit-fly brain, used unchanged, sizes the steel members of an offshore wind-turbine jacket.',
       date: '2026-10-01',
+      tags: ['FEA', 'Optimisation', 'Connectome', 'Python', 'CalculiX'],
+      // One headline number shown on the home page. Optional.
+      metric: 'Reached the best-known 339 t design from 4 of 4 starts',
       // repo: 'https://github.com/YOUR-USERNAME/fly-fea',
     },
   },
