@@ -57,12 +57,14 @@ npm run build    # must pass before committing
 
 ## Status (keep this section current)
 
-- Live: plain one-page version on `main` until the merge below is pushed there.
-- `redesign` branch (merged with `claude/claude-md-redesign-status-m9qmmf`): split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
+- Live on `main` (PR #1, merged): split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
   content. Combined with the teal design: teal header with Home / About / Projects tabs on every page,
   teal side panel with photo and background-image placeholders (`site.photo`, `site.heroImage`),
   project thumbnails (`thumbnail`, else `image`, else placeholder). Old `/about`, `/projects`,
-  `/writing` URLs redirect to home-page sections (`astro.config.mjs`). Waiting on the owner's real experience, education, skills, other projects, role/tagline,
+  `/writing` URLs redirect to home-page sections (`astro.config.mjs`).
+  The side panel is pinned at window height on wide screens; its spacing scales with window height,
+  and a small script in `index.astro` unpins it (scrolls with the page) when the contents don't fit,
+  so it is never cut off on short laptop screens, display scaling or browser zoom. Waiting on the owner's real experience, education, skills, other projects, role/tagline,
   public email, resume PDF. Photo: none for now (`site.photo`).
 - The fly-fea write-up still needs the owner's rewrite (a `[link]` placeholder at the end of the post;
   the report's opening line says "in this repository").

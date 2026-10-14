@@ -38,13 +38,15 @@ const sections = [
         </nav>
       </div>
 
-      <ul class="social">
-        <li><a href={site.links.github} aria-label="GitHub" title="GitHub"><Icon name="github" /></a></li>
-        <li><a href={site.links.linkedin} aria-label="LinkedIn" title="LinkedIn"><Icon name="linkedin" /></a></li>
-        {site.email && <li><a href={`mailto:${site.email}`} aria-label="Email" title="Email"><Icon name="mail" /></a></li>}
-        {site.resume && <li><a href={site.resume} aria-label="Resume (PDF)" title="Resume (PDF)"><Icon name="file" /></a></li>}
-      </ul>
-      {!site.heroImage && <span class="hero-label">Background image placeholder</span>}
+      <div class="side-foot">
+        <ul class="social">
+          <li><a href={site.links.github} aria-label="GitHub" title="GitHub"><Icon name="github" /></a></li>
+          <li><a href={site.links.linkedin} aria-label="LinkedIn" title="LinkedIn"><Icon name="linkedin" /></a></li>
+          {site.email && <li><a href={`mailto:${site.email}`} aria-label="Email" title="Email"><Icon name="mail" /></a></li>}
+          {site.resume && <li><a href={site.resume} aria-label="Resume (PDF)" title="Resume (PDF)"><Icon name="file" /></a></li>}
+        </ul>
+        {!site.heroImage && <span class="hero-label">Background image placeholder</span>}
+      </div>
     </header>
 
     <!-- Right column: scrolls -->
@@ -194,6 +196,19 @@ const sections = [
   );
   document.querySelectorAll('main section[id]').forEach((s) => observer.observe(s));
   window.addEventListener('scroll', setTab, { passive: true });
+
+  // On wide screens the side panel is pinned at exactly the window height. If the window is too
+  // short for its contents (small laptop, display scaling, browser zoom), unpin it so it scrolls
+  // with the page instead of being cut off. Re-checked on resize and zoom.
+  const side = document.querySelector<HTMLElement>('.side');
+  const fitSide = () => {
+    if (!side) return;
+    side.classList.remove('unpinned');
+    if (side.scrollHeight > side.clientHeight + 1) side.classList.add('unpinned');
+  };
+  fitSide();
+  window.addEventListener('resize', fitSide);
+  document.fonts?.ready.then(fitSide);
 </script>
 
 <style>
@@ -221,8 +236,9 @@ const sections = [
       repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 32px),
       linear-gradient(160deg, #0a3533, #17706a);
   }
+  /* Social icons and the placeholder label share the bottom row, so they can't overlap. */
+  .side-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1rem; margin-top: 2rem; }
   .hero-label {
-    position: absolute; right: 16px; bottom: 0.75rem;
     font-size: 0.72rem; opacity: 0.6;
     border: 1px dashed currentColor; border-radius: 4px; padding: 0.1rem 0.5rem;
   }
@@ -249,7 +265,7 @@ const sections = [
   .toc a:hover .line, .toc a.active .line { width: 4rem; }
   .toc a.active .line { background: var(--highlight); height: 2px; }
 
-  .social { display: flex; gap: 1.25rem; margin-top: 2rem; }
+  .social { display: flex; gap: 1.25rem; }
   .social a { color: var(--brand-ink); opacity: 0.75; display: block; }
   .social a:hover { opacity: 1; color: var(--highlight); }
 
@@ -313,15 +329,28 @@ const sections = [
       position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h));
       display: flex; flex-direction: column; justify-content: space-between;
       margin: 0;
-      padding: 5rem 3rem 4rem max(3rem, calc((100vw - 72rem) / 2 + 3rem));
+      /* Vertical spacing shrinks with the window height (vh) so the panel fits short laptop screens. */
+      padding: clamp(1.75rem, 8vh, 5rem) 3rem clamp(1.75rem, 6vh, 4rem) max(3rem, calc((100vw - 72rem) / 2 + 3rem));
     }
+    /* Window still too short for the panel: let it scroll with the page (set by the script below). */
+    .side.unpinned { position: relative; top: auto; height: auto; min-height: calc(100vh - var(--header-h)); }
+    .photo { width: clamp(64px, 11vh, 96px); margin-bottom: clamp(0.75rem, 2vh, 1.25rem); }
+    h1 { font-size: clamp(1.9rem, min(4vw, 5.5vh), 2.9rem); }
+    .role { font-size: clamp(1rem, 2vh, 1.15rem); }
+    .tagline { margin-top: clamp(0.5rem, 1.5vh, 0.9rem); }
+    .side-foot { margin-top: clamp(1rem, 3vh, 2rem); }
     .content { padding-right: max(3rem, calc((100vw - 72rem) / 2 + 3rem)); }
-    .toc { display: block; margin-top: 4rem; }
+    .toc { display: block; margin-top: clamp(1.25rem, 6vh, 4rem); }
+    .toc a { padding: clamp(0.3rem, 1vh, 0.55rem) 0; }
     .content { padding-top: 4.5rem; }
     section { padding-top: 0; margin-bottom: 6rem; scroll-margin-top: calc(var(--header-h) + 3rem); }
     .section-title { position: static; background: none; backdrop-filter: none; padding: 0; }
     .item { grid-template-columns: 7.5rem 1fr; }
     .project { grid-template-columns: 9.5rem 1fr; gap: 1.25rem; }
     .thumb { margin-top: 0.2rem; }
+  }
+  /* Without JavaScript, very short windows unpin the panel too. */
+  @media (min-width: 64rem) and (max-height: 540px) {
+    .side { position: relative; top: auto; height: auto; min-height: calc(100vh - var(--header-h)); }
   }
 </style>
