@@ -57,8 +57,8 @@ npm run build    # must pass before committing
 
 ## Status (keep this section current)
 
-- Live: plain one-page version on `main`.
-- `redesign` branch: split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
+- Live: plain one-page version on `main` until the merge below is pushed there.
+- `redesign` branch (merged with `claude/claude-md-redesign-status-m9qmmf`): split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
   content. Combined with the teal design: teal header with Home / About / Projects tabs on every page,
   teal side panel with photo and background-image placeholders (`site.photo`, `site.heroImage`),
   project thumbnails (`thumbnail`, else `image`, else placeholder). Old `/about`, `/projects`,
