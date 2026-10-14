@@ -1,0 +1,39 @@
+---
+// Shows the image when `src` is set, otherwise a labelled box of the same shape.
+interface Props {
+  src?: string; // path under public/, e.g. '/photo.jpg'
+  alt: string;
+  label: string; // what goes here, shown inside the empty box
+  ratio?: string; // CSS aspect-ratio, e.g. '16 / 9'
+  round?: boolean;
+  class?: string;
+}
+
+const { src, alt, label, ratio = '16 / 9', round = false, class: cls } = Astro.props;
+---
+
+{src ? (
+  <img class:list={['ph-img', cls, { round }]} src={src} alt={alt} style={`aspect-ratio: ${ratio}`} loading="lazy" />
+) : (
+  <div class:list={['ph', cls, { round }]} style={`aspect-ratio: ${ratio}`} role="img" aria-label={`${label} (placeholder)`}>
+    <span>{label}</span>
+  </div>
+)}
+
+<style>
+  .ph, .ph-img { width: 100%; border-radius: 6px; }
+  .ph-img { object-fit: cover; margin: 0; padding: 0; background: var(--tint); }
+  .ph {
+    display: grid;
+    place-items: center;
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border: 1.5px dashed var(--rule-strong);
+    background:
+      repeating-linear-gradient(45deg, transparent 0 10px, var(--stripe) 10px 11px),
+      var(--tint);
+  }
+  .round { border-radius: 50%; }
+</style>

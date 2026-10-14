@@ -10,10 +10,16 @@ interface Props {
   description?: string;
   image?: string; // path under public/, used for link previews
   home?: boolean;
+  tab?: 'home' | 'about' | 'projects'; // which header tab starts highlighted
 }
 
-const { title, description = site.description, image, home = false } = Astro.props;
-const fullTitle = title ? `${title} | ${site.name}` : site.name;
+const { title, description = site.description, image, home = false, tab } = Astro.props;
+const tabs = [
+  { id: 'home', href: '/', label: 'Home' },
+  { id: 'about', href: '/#about', label: 'About' },
+  { id: 'projects', href: '/#projects', label: 'Projects' },
+];
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.role}`;
 const base = Astro.site ?? Astro.url;
 const canonical = new URL(Astro.url.pathname, base);
 const imageUrl = image && new URL(image, base);
@@ -37,13 +43,16 @@ const imageUrl = image && new URL(image, base);
     <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
   </head>
   <body>
-    {!home && (
-      <header>
-        <a href="/">{site.name}</a>
-      </header>
-    )}
-    <main>
-      <slot />
-    </main>
+    <header class="site-header">
+      <nav aria-label="Main">
+        <a class="brand" href="/">{site.name}</a>
+        <ul class="tabs">
+          {tabs.map((t) => (
+            <li><a href={t.href} data-tab={t.id} class:list={{ active: t.id === tab }}>{t.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+    <slot />
   </body>
 </html>

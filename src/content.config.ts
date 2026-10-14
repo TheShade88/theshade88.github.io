@@ -13,7 +13,10 @@ const projects = defineCollection({
     summary: z.string(),
     date: z.coerce.date(),
     repo: z.string().url().optional(),
-    image: z.string().optional(), // link-preview image under public/, set by the sync script
+    image: z.string().optional(), // link-preview + thumbnail image under public/, set by the sync script
+    thumbnail: z.string().optional(), // card image under public/; falls back to `image`, then a placeholder
+    tags: z.array(z.string()).default([]),
+    metric: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

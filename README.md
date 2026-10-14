@@ -22,14 +22,19 @@ file names, title, one-line summary, date, optional repo link), then run `npm ru
 
 | What | File |
 |---|---|
-| Name, email, links | `src/data/site.ts` |
+| All home-page content: role, about, experience, education, skills, links | `src/data/site.ts` |
 | Site URL (needed for deploy) | `astro.config.mjs` |
 | Project list and metadata | `scripts/sync-projects.mjs` |
-| Home page text | `src/pages/index.astro` |
+| Home page layout | `src/pages/index.astro` |
 | Typography and colours | `src/styles/global.css` |
-| Resume | `public/resume.pdf`, then set `hasResume: true` in `site.ts` |
+| Resume / photo / home background | `public/resume.pdf`, `public/photo.jpg`, `public/hero.jpg`, then set `resume`, `photo`, `heroImage` in `site.ts` |
+| Project thumbnail | `thumbnail` in the project's `meta` in `scripts/sync-projects.mjs` (falls back to the preview image) |
+
+Images left unset show a labelled placeholder.
 
 ## Deploy
 
 Pushing to `main` builds and publishes via `.github/workflows/deploy.yml`.
 One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
+
+See `CLAUDE.md` for working rules and current status (also used by Claude sessions on the phone).
