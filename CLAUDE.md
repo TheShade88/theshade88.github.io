@@ -13,7 +13,7 @@ needs to know must be in this file or the README, not in local memory.
 2. Suggestions are welcome; when told "only focus on current task", don't deviate.
 3. Suggest improvements to the owner's prompt or approach when useful.
 4. **Never push to `main` without explicit approval.** Pushing to `main` publishes the live site.
-   Work on a branch (currently `redesign`) and push that; merge to `main` only when asked.
+   Work on a branch (currently `rebuild`) and push that. The owner publishes by merging a pull request into `main`.
 5. Explain tooling from first principles; the owner is strong in engineering, newer to web tooling.
 
 ## Writing style for any site copy
@@ -57,6 +57,21 @@ npm run build    # must pass before committing
 
 ## Status (keep this section current)
 
+- **Rebuild in progress on branch `rebuild`** (started 2026-11-13; the old design stays in `main` at 15936c5).
+  Goal: a simple portfolio that shows skills and projects and does not look AI-generated or templated.
+  - Done: review of the current site (verdict: projects buried, layout is a copy of a common developer
+    template, two menus, two project lists, placeholders visible to visitors). Keep Astro + GitHub Pages,
+    project folders, article/report pages, IBM Plex, one colour family.
+  - Decided by the owner: home page is a summary (visitors judge the site by it) pointing to separate
+    Projects and About pages with the detail. In-progress/planned projects shown in an "in progress" list.
+    Photo: yes. Light/dark follows the device setting (no toggle). Real project images will come later:
+    design assumes images, with labelled placeholders meanwhile. Project list stays PLACEHOLDER until the
+    owner fills it in. Projects need a status (built / in progress / planned) and a field.
+  - Waiting on the owner: pick one of three design directions, mocked up in `design/mockups/`
+    (A "Report", teal; B "Drawing sheet", ink blue; C "Lead figure and register", oxide red).
+    Build them with `node design/mockups/build.mjs . <out dir>`. Also waiting on a yes/no to changing
+    `npm run sync` so each project's frontmatter is owned by this repo and sync only copies text and figures.
+  - Next: phased build plan for the chosen direction, approved phase by phase, then a PR from `rebuild` into `main`.
 - Live on `main` (PR #1, merged): split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
   content. Combined with the teal design: teal header with Home / About / Projects tabs on every page,
   teal side panel with photo and background-image placeholders (`site.photo`, `site.heroImage`),
