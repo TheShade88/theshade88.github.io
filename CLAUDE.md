@@ -67,11 +67,13 @@ npm run build    # must pass before committing
     Photo: yes. Light/dark follows the device setting (no toggle). Real project images will come later:
     design assumes images, with labelled placeholders meanwhile. Project list stays PLACEHOLDER until the
     owner fills it in. Projects need a status (built / in progress / planned) and a field.
-  - Waiting on the owner: pick one of three design directions, mocked up in `design/mockups/`
-    (A "Report", teal; B "Drawing sheet", ink blue; C "Lead figure and register", oxide red).
-    Build them with `node design/mockups/build.mjs . <out dir>`. Also waiting on a yes/no to changing
-    `npm run sync` so each project's frontmatter is owned by this repo and sync only copies text and figures.
-  - Next: phased build plan for the chosen direction, approved phase by phase, then a PR from `rebuild` into `main`.
+  - Three design directions were mocked up in `design/mockups/` (build them with
+    `node design/mockups/build.mjs . <out dir>`). **Chosen (2026-11-16): direction A ("Report", teal) for the
+    home page and overall look, with C's register table (filter by field) on the Projects page.**
+    Yes to changing `npm run sync`: each project's frontmatter is owned by this repo; sync only copies the
+    article text, report and figures.
+  - Next: phased build plan (5 phases) proposed 2026-11-16; waiting for approval of phase 1. Each phase is
+    approved separately. Ends with a PR from `rebuild` into `main`.
 - Live on `main` (PR #1, merged): split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
   content. Combined with the teal design: teal header with Home / About / Projects tabs on every page,
   teal side panel with photo and background-image placeholders (`site.photo`, `site.heroImage`),
