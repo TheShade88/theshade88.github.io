@@ -144,3 +144,6 @@ figcaption b { font-family: var(--mono); font-weight: 500; color: var(--text); m
 .fit-contain { object-fit: contain; }
 .fit-cover { object-fit: cover; }
 .photo-img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; }
+
+/* Visually hidden, still read by screen readers. */
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

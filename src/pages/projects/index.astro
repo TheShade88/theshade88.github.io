@@ -1,0 +1,152 @@
+---
+// Projects page: every project in one table, grouped by status, with a filter by field.
+import Base from '../../layouts/Base.astro';
+import Cover from '../../components/Cover.astro';
+import Status from '../../components/Status.astro';
+import { fields } from '../../data/fields';
+import { getProjects, projectUrl, year, statusLabel } from '../../data/projects';
+
+const projects = await getProjects();
+const groups = (['built', 'in-progress', 'planned'] as const)
+  .map((status) => ({ status, items: projects.filter((p) => p.data.status === status) }))
+  .filter((g) => g.items.length > 0);
+// One filter button per field that has projects, in the order of src/data/fields.ts.
+const counts = fields
+  .map((field) => ({ field, n: projects.filter((p) => p.data.fields.includes(field)).length }))
+  .filter((c) => c.n > 0);
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLowerCase()}`).join(', ');
+---
+
+<Base title="Projects" page="projects" description="Engineering projects: built, in progress and planned.">
+  <div class="wrap">
+    <header class="head ruled">
+      <h1 class="page-title">Projects</h1>
+      <p class="tally">{tally}.</p>
+    </header>
+
+    <!-- Shown by the script below; without JavaScript every project is listed and there is nothing to filter. -->
+    <div class="filters" role="group" aria-label="Show projects by field" hidden>
+      <button type="button" aria-pressed="true" data-field="">All <span>{projects.length}</span></button>
+      {counts.map((c) => (
+        <button type="button" aria-pressed="false" data-field={slug(c.field)}>{c.field} <span>{c.n}</span></button>
+      ))}
+    </div>
+
+    <table class="register">
+      <thead>
+        <tr>
+          <th class="c-fig"><span class="vh">Figure</span></th>
+          <th>Project</th>
+          <th class="c-field">Field</th>
+          <th class="c-year">Year</th>
+          <th class="c-res">Result</th>
+        </tr>
+      </thead>
+      {groups.map((g) => (
+        <tbody>
+          <tr class="group"><th colspan="5" scope="colgroup"><Status status={g.status} /></th></tr>
+          {g.items.map((p) => (
+            <tr data-fields={p.data.fields.map(slug).join(' ')}>
+              <td class="c-fig">
+                {p.data.thumbnail ? (
+                  <Cover src={p.data.thumbnail} frame="4 / 3" crop widths={[160, 320]} sizes="8rem" />
+                ) : (
+                  <Cover src={p.data.cover} hint={p.data.coverHint} frame="4 / 3" small widths={[160, 320]} sizes="8rem" />
+                )}
+              </td>
+              <td>
+                {projectUrl(p) ? <a class="title" href={projectUrl(p)}>{p.data.title}</a> : <span class="title">{p.data.title}</span>}
+                <span class="sub">{p.data.summary}</span>
+              </td>
+              <td class="c-field">{p.data.fields.join(', ')}</td>
+              <td class="c-year">{year(p)}</td>
+              <td class="c-res">{p.data.result ?? (p.data.status !== 'built' && <Status status={p.data.status} />)}</td>
+            </tr>
+          ))}
+        </tbody>
+      ))}
+    </table>
+  </div>
+</Base>
+
+<script>
+  // Field filter: shows only the rows whose project has that field, and hides empty groups.
+  // The chosen field goes in the address (e.g. /projects/#naval-architecture) so a filtered view can be shared.
+  const bar = document.querySelector<HTMLElement>('.filters');
+  if (bar) {
+    bar.hidden = false;
+    const buttons = [...bar.querySelectorAll<HTMLButtonElement>('button')];
+    const groups = [...document.querySelectorAll<HTMLElement>('.register tbody')];
+    const show = (field: string) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.field === field)));
+      for (const g of groups) {
+        let any = false;
+        g.querySelectorAll<HTMLElement>('tr[data-fields]').forEach((row) => {
+          const match = !field || row.dataset.fields!.split(' ').includes(field);
+          row.hidden = !match;
+          any ||= match;
+        });
+        g.hidden = !any;
+      }
+    };
+    for (const b of buttons) {
+      b.addEventListener('click', () => {
+        const field = b.dataset.field ?? '';
+        show(field);
+        history.replaceState(null, '', field ? `#${field}` : location.pathname);
+      });
+    }
+    const initial = decodeURIComponent(location.hash.slice(1));
+    if (buttons.some((b) => b.dataset.field === initial)) show(initial);
+  }
+</script>
+
+<style>
+  .head { padding: 2.5rem 0 1.5rem; }
+  .tally { margin: 0.6rem 0 0; color: var(--muted); }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 1.25rem 0 0.5rem; }
+  .filters button {
+    font: inherit; font-size: 0.88rem; color: var(--muted); background: none; cursor: pointer;
+    border: 1px solid transparent; border-radius: 3px; padding: 0.2rem 0.6rem;
+  }
+  .filters button span { font-family: var(--mono); font-size: 0.78rem; margin-left: 0.15rem; }
+  .filters button:hover { color: var(--text); border-color: var(--rule); }
+  .filters button[aria-pressed='true'] { color: var(--text); border-color: var(--rule-strong); }
+
+  .register { width: 100%; border-collapse: collapse; margin: 0.5rem 0 4rem; }
+  .register thead th {
+    font: 400 0.78rem/1.4 var(--mono); color: var(--muted); text-align: left;
+    padding: 0.75rem 1.25rem 0.5rem 0; border-bottom: 1px solid var(--rule-strong);
+  }
+  .register td { padding: 1rem 1.25rem 1rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .register td:last-child, .register th:last-child { padding-right: 0; }
+  .register .group th { text-align: left; font: 600 1rem/1.4 var(--sans); padding: 2rem 0 0.6rem; border-bottom: 1px solid var(--rule-strong); }
+  .c-fig { width: 8rem; }
+  .c-field { width: 12rem; font-size: 0.93rem; }
+  .c-year { width: 4rem; font-family: var(--mono); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+  .c-res { width: 16rem; font-size: 0.93rem; }
+  .title { font-weight: 600; color: var(--text); text-decoration: none; }
+  a.title:hover { color: var(--accent); text-decoration: underline; }
+  .sub { display: block; color: var(--muted); font-size: 0.93rem; margin-top: 0.2rem; }
+  .register [hidden] { display: none !important; }
+
+  /* Medium screens: drop the year column's width and let the result wrap. */
+  @media (max-width: 64rem) {
+    .c-field { width: 9rem; }
+    .c-res { width: 12rem; }
+  }
+  /* Phones and narrow windows: each project becomes a block, figure on the left. */
+  @media (max-width: 48rem) {
+    .register thead { display: none; }
+    .register, .register tbody { display: block; }
+    .register tr { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.2rem 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+    .register td { display: block; border: 0; padding: 0; width: auto; }
+    .register td.c-fig { grid-row: span 4; }
+    .register td.c-field, .register td.c-year { font: 400 0.75rem/1.5 var(--mono); color: var(--muted); }
+    .register td:empty { display: none; }
+    .register tr.group { display: block; padding: 0; border: 0; }
+    .register .group th { display: block; }
+  }
+</style>

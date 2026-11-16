@@ -27,25 +27,34 @@ rewrite them. Never invent facts about the owner's experience.
 
 | What | File |
 |---|---|
-| All home-page content (role, tagline, about, experience, education, skills, smaller projects, writing, links) | `src/data/site.ts` |
-| Home page layout (split: fixed sidebar + scrolling sections) | `src/pages/index.astro` |
-| Project write-ups (one folder each: `index.md`, optional `report.md`, `figures/`) | `src/content/projects/<id>/` |
-| Project list metadata (title, summary, date, tags, metric, thumbnail) | `scripts/sync-projects.mjs` |
-| Article layout (project + report pages) | `src/layouts/Article.astro` |
-| Colours (teal palette variables at the top), header tabs, fonts, long-form text styles | `src/styles/global.css` |
+| Personal content: name, role, intro, email, links, About text, experience, education, skills | `src/data/site.ts` |
+| Photo and CV: picked up automatically from `src/assets/photo.jpg` and `public/cv.pdf` | `src/data/files.ts` |
+| The list of fields (project `fields` must use these names; Projects page filter) | `src/data/fields.ts` |
+| Projects: one folder each, frontmatter checked by the schema | `src/content/projects/<id>/`, schema in `src/content.config.ts` |
+| Project sorting, status labels, "has a page" rule | `src/data/projects.ts` |
+| Home page (intro, selected work, in progress, About summary) | `src/pages/index.astro` |
+| Projects page (register table with field filter) | `src/pages/projects/index.astro` |
+| About page | `src/pages/about.astro` |
+| Write-up and report pages | `src/pages/projects/[id]/`, layout `src/layouts/Article.astro` |
+| Page frame: head, header links, footer, link-preview image | `src/layouts/Base.astro` |
+| Shared pieces: figure or placeholder, photo, status mark, contact links | `src/components/` |
+| Colours (teal, light and dark, at the top), shared styles, long-form text styles | `src/styles/global.css` |
+| Redirects (`/writing` goes home) | `astro.config.mjs` |
+| Design mockups from the rebuild (to be removed before the PR) | `design/mockups/` |
 | Deploy workflow | `.github/workflows/deploy.yml` (runs on push to `main` only) |
 
-## Project content and `npm run sync`
+## Projects and `npm run sync`
 
-On the laptop, `npm run sync` copies each project's write-up from its own repo (e.g.
-`D:/Claude/FEA fly/public/fly-fea/docs`) into `src/content/projects/<id>/`. Those source folders do **not**
-exist in cloud sessions; there the script just prints "skip". In a cloud session, edit the copies in
-`src/content/projects/` directly, and tell the owner, because the next sync on the laptop overwrites them
-unless the same edit is made in the source repo.
+Every project is a folder `src/content/projects/<id>/` with `index.md`: frontmatter (title, summary, status,
+fields, optional date, result, numbers, featured, cover, thumbnail, preview, tags, repo) and optional write-up
+text below it. No text: listed, no page. Optional `report.md` and `figures/`. README "Add a project" has the
+full example. The build validates the frontmatter against `src/content.config.ts`.
 
-To add a project that has a write-up: add a folder `src/content/projects/<id>/` with `index.md` (frontmatter:
-title, summary, date, tags, metric, image) and its figures, and copy a thumbnail to `public/og/<id>.png`.
-Projects without a write-up go in `moreProjects` in `src/data/site.ts`.
+On the laptop, `npm run sync` copies each listed project's article text, `report.md` and `figures/` from its own
+repo (e.g. `D:/Claude/FEA fly/public/fly-fea/docs`). It **keeps the frontmatter**, which this repo owns, so
+titles, status and fields can be edited from any machine. The source folders do not exist in cloud sessions;
+there the script prints "skip". The article text and figures of a synced project are still overwritten by the
+next sync, so edit those in the source repo (and tell the owner if you change them here).
 
 ## Commands
 
@@ -72,8 +81,14 @@ npm run build    # must pass before committing
     home page and overall look, with C's register table (filter by field) on the Projects page.**
     Yes to changing `npm run sync`: each project's frontmatter is owned by this repo; sync only copies the
     article text, report and figures.
-  - Next: phased build plan (5 phases) proposed 2026-11-16; waiting for approval of phase 1. Each phase is
-    approved separately. Ends with a PR from `rebuild` into `main`.
+  - Phases 1-3 done (2026-11-16): project data model and schema, sync script that keeps the frontmatter
+    (tested against a fake source), shared layout, home page (A), Projects register with field filter (C),
+    About page, restyled write-up/report pages, 404, `/writing` redirect. Old URLs checked; no sideways
+    scroll or clipping at 12 window sizes (320 px phone to 2560x1440), light and dark.
+    **Owner's choice: placeholders stay visible on the live site for now**; seven `placeholder-*` project
+    folders demonstrate the layout and are to be replaced or deleted by the owner.
+  - Next: phase 4 (full testing: zoom, accessibility check, page weight) and phase 5 (remove `design/`,
+    final docs, PR from `rebuild` into `main`). Each phase approved separately.
 - Live on `main` (PR #1, merged): split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
   content. Combined with the teal design: teal header with Home / About / Projects tabs on every page,
   teal side panel with photo and background-image placeholders (`site.photo`, `site.heroImage`),

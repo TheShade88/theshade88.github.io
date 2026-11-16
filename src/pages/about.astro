@@ -1,0 +1,106 @@
+---
+// About page: text, photo, contact, experience, education, skills. Content from src/data/site.ts.
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Contact from '../components/Contact.astro';
+import { site, about, experience, education, skills } from '../data/site';
+import { fieldsInSentence } from '../data/fields';
+import { cvUrl } from '../data/files';
+
+const sections = [experience.length && 'experience', education.length && 'education', skills.length && 'skills'].filter(Boolean);
+const num = (id: string) => sections.indexOf(id) + 1;
+---
+
+<Base title="About" page="about" description={`About ${site.name}: ${site.role.toLowerCase()}.`}>
+  <div class="wrap">
+    <section class="intro ruled">
+      <div>
+        <h1 class="page-title">About</h1>
+        {about.map((p) => <p class="para">{p}</p>)}
+        <dl class="facts">
+          <dt>Fields</dt>
+          <dd>{fieldsInSentence}</dd>
+          <dt>Contact</dt>
+          <dd><Contact /></dd>
+        </dl>
+      </div>
+      <div class="photo"><Photo sizes="(min-width: 48rem) 14rem, 9rem" /></div>
+    </section>
+
+    {experience.length > 0 && (
+      <section class="sec ruled" id="experience" aria-labelledby="exp-title">
+        <div class="sec-head">
+          <h2 id="exp-title"><span class="n">{num('experience')}</span>Experience</h2>
+          {cvUrl ? <a class="more" href={cvUrl}>Full CV (PDF) →</a> : <span class="todo">Full CV (placeholder)</span>}
+        </div>
+        <ol class="items">
+          {experience.map((e) => (
+            <li>
+              <div class="when">{e.dates}</div>
+              <div>
+                <h3>{e.role} · {e.url ? <a href={e.url}>{e.company}</a> : e.company}</h3>
+                <p>{e.summary}</p>
+                {e.skills && e.skills.length > 0 && <p class="meta">{e.skills.join(' · ')}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {education.length > 0 && (
+      <section class="sec ruled" id="education" aria-labelledby="edu-title">
+        <div class="sec-head"><h2 id="edu-title"><span class="n">{num('education')}</span>Education</h2></div>
+        <ol class="items">
+          {education.map((e) => (
+            <li>
+              <div class="when">{e.dates}</div>
+              <div>
+                <h3>{e.degree} · {e.school}</h3>
+                {e.note && <p>{e.note}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {skills.length > 0 && (
+      <section class="sec" id="skills" aria-labelledby="skills-title">
+        <div class="sec-head"><h2 id="skills-title"><span class="n">{num('skills')}</span>Skills</h2></div>
+        <dl class="kv skills">
+          {skills.map((g) => (
+            <div><dt>{g.group}</dt><dd>{g.items.join(', ')}</dd></div>
+          ))}
+        </dl>
+      </section>
+    )}
+  </div>
+</Base>
+
+<style>
+  .intro { display: grid; gap: 1.5rem; padding: 2.5rem 0 3rem; }
+  .photo { width: 9rem; order: -1; }
+  @media (min-width: 48rem) {
+    .intro { grid-template-columns: minmax(0, 1fr) 14rem; gap: 3rem; padding-top: 3.5rem; }
+    .photo { order: 0; width: auto; }
+  }
+  .para { max-width: 38rem; margin: 1rem 0 0; }
+  .page-title + .para { margin-top: 1.5rem; font-size: 1.15rem; line-height: 1.55; }
+  .facts { margin: 2rem 0 0; display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: 0.5rem 1rem; max-width: 42rem; font-size: 0.95rem; }
+  .facts dt { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); padding-top: 0.2rem; }
+  .facts dd { margin: 0; }
+
+  .items { list-style: none; margin: 0; padding: 0; }
+  .items li { display: grid; gap: 0.25rem 1.5rem; padding: 1rem 0; border-top: 1px solid var(--rule); }
+  .items li:first-child { border-top: 0; padding-top: 0; }
+  @media (min-width: 40rem) { .items li { grid-template-columns: 9rem minmax(0, 1fr); } }
+  .when { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); padding-top: 0.2rem; font-variant-numeric: tabular-nums; }
+  .items h3 { font-size: 1.05rem; margin: 0 0 0.35rem; }
+  .items p { margin: 0 0 0.5rem; max-width: 40rem; color: var(--muted); }
+  .items .meta { margin: 0; }
+
+  .skills { max-width: 42rem; }
+  .skills div { grid-template-columns: 8rem minmax(0, 1fr); }
+  .skills div:first-child { border-top: 0; }
+</style>
