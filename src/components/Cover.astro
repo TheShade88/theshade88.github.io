@@ -12,9 +12,10 @@ interface Props {
   widths: number[]; // image widths to generate, in pixels
   sizes: string; // how wide the image is shown, so the browser picks the right width
   small?: boolean; // compact placeholder for thumbnails
+  eager?: boolean; // load straight away (figures near the top of a page); others load as you scroll
 }
 
-const { src, alt = '', hint, frame, crop = false, widths, sizes, small = false } = Astro.props;
+const { src, alt = '', hint, frame, crop = false, widths, sizes, small = false, eager = false } = Astro.props;
 ---
 
 {
@@ -24,6 +25,7 @@ const { src, alt = '', hint, frame, crop = false, widths, sizes, small = false }
       alt={alt}
       widths={widths}
       sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
       class:list={['plate', frame && (crop ? 'fit-cover' : 'fit-contain')]}
       style={frame ? `aspect-ratio: ${frame}` : undefined}
     />

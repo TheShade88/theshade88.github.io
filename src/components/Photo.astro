@@ -12,7 +12,7 @@ const { sizes } = Astro.props;
 
 {
   photo ? (
-    <Image src={photo} alt={`Photo of ${site.name}`} widths={[240, 480, 720]} sizes={sizes} class="photo-img" />
+    <Image src={photo} alt={`Photo of ${site.name}`} widths={[240, 480, 720]} sizes={sizes} loading="eager" class="photo-img" />
   ) : (
     <div class="ph" style="aspect-ratio: 4 / 5" role="img" aria-label="Photo placeholder">
       <span>Photo</span>
