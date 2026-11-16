@@ -87,6 +87,11 @@ npm run build    # must pass before committing
     scroll or clipping at 12 window sizes (320 px phone to 2560x1440), light and dark.
     **Owner's choice: placeholders stay visible on the live site for now**; seven `placeholder-*` project
     folders demonstrate the layout and are to be replaced or deleted by the owner.
+  - Waiting on the owner (list given 2026-11-16): real text in `src/data/site.ts` (role, DRAFT intro, email,
+    About, experience, education, skills); `src/assets/photo.jpg`; `public/cv.pdf`; real projects replacing the
+    `placeholder-*` folders, with cover figures; a small `thumbnail` for fly-fea; review fly-fea's new frontmatter
+    (key numbers, caption) and the field names in `src/data/fields.ts`.
+    Until this merges, don't run `npm run sync` on `main` (the old script there rewrites the frontmatter).
   - Next: phase 4 (full testing: zoom, accessibility check, page weight) and phase 5 (remove `design/`,
     final docs, PR from `rebuild` into `main`). Each phase approved separately.
 - Live on `main` (PR #1, merged): split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
