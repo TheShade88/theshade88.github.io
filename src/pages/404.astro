@@ -1,8 +1,12 @@
 ---
-import Article from '../layouts/Article.astro';
+import Base from '../layouts/Base.astro';
 ---
 
-<Article title="Not found">
-  <h1>404</h1>
-  <p>That page doesn't exist. <a href="/">Go to the home page</a>.</p>
-</Article>
+<Base title="Page not found">
+  <div class="wrap">
+    <div class="sec">
+      <h1 class="page-title">Page not found</h1>
+      <p>There is no page at this address. Try the <a href="/">home page</a> or the <a href="/projects/">list of projects</a>.</p>
+    </div>
+  </div>
+</Base>

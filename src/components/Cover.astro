@@ -1,0 +1,45 @@
+---
+// A project's figure: the image when one is set, otherwise a labelled placeholder of the same shape.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src?: ImageMetadata;
+  alt?: string;
+  hint?: string; // what should go here; shown in the placeholder
+  frame?: string; // fixed shape as a CSS aspect-ratio, e.g. '4 / 3'. Omit to keep the image's own shape.
+  crop?: boolean; // fill the frame by cropping (thumbnails made for the slot); default shows the whole image
+  widths: number[]; // image widths to generate, in pixels
+  sizes: string; // how wide the image is shown, so the browser picks the right width
+  small?: boolean; // compact placeholder for thumbnails
+}
+
+const { src, alt = '', hint, frame, crop = false, widths, sizes, small = false } = Astro.props;
+---
+
+{
+  src ? (
+    <Image
+      src={src}
+      alt={alt}
+      widths={widths}
+      sizes={sizes}
+      class:list={['plate', frame && (crop ? 'fit-cover' : 'fit-contain')]}
+      style={frame ? `aspect-ratio: ${frame}` : undefined}
+    />
+  ) : (
+    <div
+      class:list={['ph', { small }]}
+      style={`aspect-ratio: ${frame ?? '4 / 3'}`}
+      role="img"
+      aria-label={`Figure placeholder${hint ? `: ${hint}` : ''}`}
+    >
+      <span>{small ? 'Figure' : <>Figure placeholder{hint && <><br />{hint}</>}</>}</span>
+    </div>
+  )
+}
+
+<style>
+  .small { padding: 0.3rem; font-size: 0.7rem; }
+  .small span { padding: 0.1rem 0.3rem; }
+</style>
