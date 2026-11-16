@@ -1,6 +1,13 @@
-// Copies each project's write-up from its own repo into the site, so the project repo stays
-// the single source of truth. Run with `npm run sync` after editing the docs there.
-// The text is copied as-is; only the leading "draft" note and the frontmatter are handled here.
+// Copies each project's write-up from its own repo into the site. Run with `npm run sync`.
+//
+// Who owns what:
+// - The project's own repo owns the article text, the technical report and the figures.
+// - This site repo owns the frontmatter: the block between the --- lines at the top of
+//   src/content/projects/<id>/index.md (title, status, fields, cover image and so on).
+//
+// So sync replaces the text below the frontmatter, report.md and the figures/ folder, and never
+// touches the frontmatter. Edit a project's title or status in its index.md here, from any machine.
+// Other files you put in the project folder (e.g. a thumbnail next to index.md) are left alone.
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -9,29 +16,24 @@ const projects = [
     id: 'fly-fea',
     source: 'D:/Claude/FEA fly/public/fly-fea/docs',
     post: 'blog-post.md',
-    report: 'technical-report.md',
-    // Figure used as the link preview on LinkedIn, Reddit etc. (about 1.9:1 works best).
-    preview: 'loop_diagram.png',
-    meta: {
-      title: "What a fruit fly's taste buds can tell you about steel",
-      summary: 'A simulated fruit-fly brain, used unchanged, sizes the steel members of an offshore wind-turbine jacket.',
-      date: '2026-10-01',
-      tags: ['FEA', 'Optimisation', 'Connectome', 'Python', 'CalculiX'],
-      // One headline number shown on the home page. Optional.
-      metric: 'Reached the best-known 339 t design from 4 of 4 starts',
-      // repo: 'https://github.com/YOUR-USERNAME/fly-fea',
-    },
+    report: 'technical-report.md', // optional; leave out if the project has no report
   },
 ];
+
+// Frontmatter for a project synced for the first time. Fill it in afterwards.
+const starter = `---
+title: "PLACEHOLDER title"
+summary: "PLACEHOLDER. One line on what it is."
+status: in-progress
+fields: ["FEA"]
+---
+`;
+
+const FRONTMATTER = /^---\r?\n[\s\S]*?\r?\n---\r?\n/;
 
 // Drops an italic "*... draft ...*" note at the top and the "---" rule after it.
 function stripDraftNote(md) {
   return md.replace(/^(# .*\n+)\*[^\n]*\*\n+---\n+/, '$1');
-}
-
-function frontmatter(meta) {
-  const lines = Object.entries(meta).map(([k, v]) => `${k}: ${JSON.stringify(v)}`);
-  return `---\n${lines.join('\n')}\n---\n\n`;
 }
 
 for (const p of projects) {
@@ -40,22 +42,23 @@ for (const p of projects) {
     continue;
   }
   const dest = join('src/content/projects', p.id);
-  rmSync(dest, { recursive: true, force: true });
   mkdirSync(dest, { recursive: true });
 
-  const post = readFileSync(join(p.source, p.post), 'utf8');
-  const meta = { ...p.meta };
-  if (p.preview) {
-    mkdirSync('public/og', { recursive: true });
-    cpSync(join(p.source, 'figures', p.preview), join('public/og', `${p.id}.png`));
-    meta.image = `/og/${p.id}.png`;
-  }
-  writeFileSync(join(dest, 'index.md'), frontmatter(meta) + stripDraftNote(post));
+  const indexPath = join(dest, 'index.md');
+  const current = existsSync(indexPath) ? readFileSync(indexPath, 'utf8') : '';
+  const kept = current.match(FRONTMATTER)?.[0];
+  const post = stripDraftNote(readFileSync(join(p.source, p.post), 'utf8'));
+  writeFileSync(indexPath, `${kept ?? starter}\n${post}`);
 
-  if (p.report) {
-    const report = readFileSync(join(p.source, p.report), 'utf8');
-    writeFileSync(join(dest, 'report.md'), stripDraftNote(report));
+  const reportPath = join(dest, 'report.md');
+  if (p.report) writeFileSync(reportPath, stripDraftNote(readFileSync(join(p.source, p.report), 'utf8')));
+  else rmSync(reportPath, { force: true });
+
+  // Replaced as a whole, so figures deleted in the project repo don't linger here.
+  rmSync(join(dest, 'figures'), { recursive: true, force: true });
+  if (existsSync(join(p.source, 'figures'))) {
+    cpSync(join(p.source, 'figures'), join(dest, 'figures'), { recursive: true });
   }
-  cpSync(join(p.source, 'figures'), join(dest, 'figures'), { recursive: true });
-  console.log(`synced ${p.id}`);
+
+  console.log(kept ? `synced ${p.id}` : `synced ${p.id} (new: fill in the frontmatter in ${indexPath})`);
 }
