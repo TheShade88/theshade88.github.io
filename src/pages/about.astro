@@ -31,7 +31,7 @@ const num = (id: string) => sections.indexOf(id) + 1;
       <section class="sec ruled" id="experience" aria-labelledby="exp-title">
         <div class="sec-head">
           <h2 id="exp-title"><span class="n">{num('experience')}</span>Experience</h2>
-          {cvUrl ? <a class="more" href={cvUrl}>Full CV (PDF) →</a> : <span class="todo">Full CV (placeholder)</span>}
+          {cvUrl ? <a class="btn" href={cvUrl}>Full CV (PDF) →</a> : <span class="todo">Full CV (placeholder)</span>}
         </div>
         <ol class="items">
           {experience.map((e) => (

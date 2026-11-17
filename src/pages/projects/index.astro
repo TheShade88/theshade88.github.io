@@ -108,12 +108,12 @@ const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLow
 
   .filters { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 1.25rem 0 0.5rem; }
   .filters button {
-    font: inherit; font-size: 0.88rem; color: var(--muted); background: none; cursor: pointer;
-    border: 1px solid transparent; border-radius: 3px; padding: 0.2rem 0.6rem;
+    font: inherit; font-size: 0.88rem; color: var(--accent); background: var(--link-bg); cursor: pointer;
+    border: 1px solid transparent; border-radius: 3px; padding: 0.25rem 0.65rem;
   }
   .filters button span { font-family: var(--mono); font-size: 0.78rem; margin-left: 0.15rem; }
-  .filters button:hover { color: var(--text); border-color: var(--rule); }
-  .filters button[aria-pressed='true'] { color: var(--text); border-color: var(--rule-strong); }
+  .filters button:hover { background: var(--link-bg-hover); }
+  .filters button[aria-pressed='true'] { color: var(--text); font-weight: 600; background: var(--link-bg-hover); border-color: var(--link-border); }
 
   .register { width: 100%; border-collapse: collapse; margin: 0.5rem 0 4rem; }
   .register thead th {
@@ -127,8 +127,9 @@ const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLow
   .c-field { width: 12rem; font-size: 0.93rem; }
   .c-year { width: 4rem; font-family: var(--mono); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
   .c-res { width: 16rem; font-size: 0.93rem; }
-  .title { font-weight: 600; color: var(--text); text-decoration: none; }
-  a.title:hover { color: var(--accent); text-decoration: underline; }
+  .title { font-weight: 600; color: var(--text); }
+  a.title { color: var(--accent); text-decoration: none; }
+  a.title:hover { text-decoration: underline; }
   .sub { display: block; color: var(--muted); font-size: 0.93rem; margin-top: 0.2rem; }
   .register [hidden] { display: none !important; }
 

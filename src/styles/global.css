@@ -14,6 +14,10 @@
   --plate: #fcfcfa;
   --hatch: rgba(11, 110, 102, 0.09);
   --code-bg: #eef2f1;
+  /* Every link sits on a light teal shade, darker on hover; action links also get a border. */
+  --link-bg: color-mix(in srgb, var(--accent) 9%, transparent);
+  --link-bg-hover: color-mix(in srgb, var(--accent) 19%, transparent);
+  --link-border: color-mix(in srgb, var(--accent) 45%, transparent);
   --sans: 'IBM Plex Sans Variable', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
   --page: 72rem; /* widest the content gets */
@@ -37,8 +41,21 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.0625rem/1.6 var(--sans); }
-a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
-a:hover { text-decoration-thickness: 2px; }
+/* Links: teal text on a light teal shade, with a thin underline, so they stand out from plain text.
+   box-decoration-break keeps the shade's padding on every line when a link wraps. */
+a {
+  color: var(--accent); background: var(--link-bg); border-radius: 2px; padding: 0.05em 0.2em;
+  text-decoration: underline 1px; text-underline-offset: 0.18em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+a:hover { background: var(--link-bg-hover); text-decoration-thickness: 2px; }
+
+/* Standalone actions ("All projects", "Read the write-up", "Technical report"): a small box. */
+.btn {
+  display: inline-block; padding: 0.3em 0.75em; line-height: 1.35; font-weight: 500;
+  border: 1px solid var(--link-border); border-radius: 3px; text-decoration: none;
+}
+.btn:hover { text-decoration: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 img { max-width: 100%; height: auto; }
 h1, h2, h3 { font-weight: 600; line-height: 1.25; }
@@ -54,18 +71,18 @@ figure { margin: 0; }
 
 /* ── Header and footer (every page) ─────────────────────────────────────── */
 .site-header .bar {
-  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
-  gap: 0.25rem 1.5rem; padding: 1rem 0 0.9rem;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.5rem 1.5rem; padding: 0.75rem 0;
 }
 .site-header .bar.no-brand { justify-content: flex-end; }
-.brand { font-weight: 600; color: var(--text); text-decoration: none; }
-.nav ul { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
-.nav a { color: var(--muted); text-decoration: none; padding: 0.2rem 0; border-bottom: 2px solid transparent; }
-.nav a:hover { color: var(--text); }
-.nav a[aria-current] { color: var(--text); border-bottom-color: var(--accent); }
+/* Header links are tabs: shaded boxes; the current page is darker with a teal bar under it. */
+.brand, .nav a { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 3px; text-decoration: none; }
+.brand { font-weight: 600; color: var(--text); margin-left: -0.7rem; }
+.nav ul { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; margin: 0; padding: 0; }
+.nav a:hover { text-decoration: none; }
+.nav a[aria-current] { background: var(--link-bg-hover); color: var(--text); font-weight: 600; box-shadow: inset 0 -2px 0 var(--accent); }
 
 .site-footer p { margin: 0; padding: 1.75rem 0 3rem; font-size: 0.9rem; color: var(--muted); }
-.site-footer a { color: inherit; }
 
 /* ── Sections: "1  Selected work" with an optional link on the right ────── */
 .sec { padding: 3rem 0 3.5rem; }
@@ -75,8 +92,6 @@ figure { margin: 0; }
 }
 .sec-head h2 { font-size: 1.4rem; margin: 0; letter-spacing: -0.005em; }
 .sec-head .n { font-family: var(--mono); font-weight: 400; font-size: 1rem; color: var(--accent); margin-right: 0.75rem; }
-.more { font-weight: 500; text-decoration: none; }
-.more:hover { text-decoration: underline; }
 
 .page-title { font-size: clamp(2rem, 4.5vw, 2.6rem); line-height: 1.1; letter-spacing: -0.015em; margin: 0; }
 

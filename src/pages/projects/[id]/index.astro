@@ -21,13 +21,13 @@ const { Content } = await render(project);
     <span>{fields.join(' · ')}</span>
     {date && <span>{monthYear(date)}</span>}
     <Status status={status} />
-    {report && <a href={`/projects/${project.id}/report/`}>Technical report</a>}
-    {repo && <a href={repo}>Code</a>}
+    {report && <a class="btn" href={`/projects/${project.id}/report/`}>Technical report</a>}
+    {repo && <a class="btn" href={repo}>Code</a>}
     {tags.length > 0 && <span>Tools: {tags.join(', ')}</span>}
   </p>
   <Content />
 </Article>
 
 <style>
-  .top { display: flex; flex-wrap: wrap; gap: 0.3rem 1.25rem; margin-bottom: 1rem; }
+  .top { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.25rem; margin-bottom: 1rem; }
 </style>

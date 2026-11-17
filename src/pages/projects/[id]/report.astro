@@ -18,7 +18,7 @@ const title = headings.find((h) => h.depth === 1)?.text ?? 'Technical report';
 
 <Article title={title} description={project?.data.summary} image={project?.data.preview ?? project?.data.cover}>
   <p slot="meta" class="meta">
-    Technical report{project && <> · <a href={`/projects/${report.id}/`}>Read the short version</a></>}
+    Technical report{project && <> · <a class="btn" href={`/projects/${report.id}/`}>Read the short version</a></>}
   </p>
   <Content />
 </Article>
