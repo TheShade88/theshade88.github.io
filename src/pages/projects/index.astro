@@ -3,6 +3,7 @@
 import Base from '../../layouts/Base.astro';
 import Cover from '../../components/Cover.astro';
 import Status from '../../components/Status.astro';
+import ProjectLink from '../../components/ProjectLink.astro';
 import { fields } from '../../data/fields';
 import { getProjects, projectUrl, year, statusLabel } from '../../data/projects';
 
@@ -55,9 +56,10 @@ const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLow
                   <Cover src={p.data.cover} hint={p.data.coverHint} frame="4 / 3" small widths={[160, 320]} sizes="8rem" />
                 )}
               </td>
-              <td>
-                {projectUrl(p) ? <a class="title" href={projectUrl(p)}>{p.data.title}</a> : <span class="title">{p.data.title}</span>}
+              <td class="c-proj">
+                <span class="title">{p.data.title}</span>
                 <span class="sub">{p.data.summary}</span>
+                {projectUrl(p) && <span class="open"><ProjectLink project={p} /></span>}
               </td>
               <td class="c-field">{p.data.fields.join(', ')}</td>
               <td class="c-year">{year(p)}</td>
@@ -128,8 +130,7 @@ const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLow
   .c-year { width: 4rem; font-family: var(--mono); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
   .c-res { width: 16rem; font-size: 0.93rem; }
   .title { font-weight: 600; color: var(--text); }
-  a.title { color: var(--accent); text-decoration: none; }
-  a.title:hover { text-decoration: underline; }
+  .open { display: block; margin-top: 0.55rem; }
   .sub { display: block; color: var(--muted); font-size: 0.93rem; margin-top: 0.2rem; }
   .register [hidden] { display: none !important; }
 
@@ -144,7 +145,11 @@ const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLow
     .register, .register tbody { display: block; }
     .register tr { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.2rem 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
     .register td { display: block; border: 0; padding: 0; width: auto; }
-    .register td.c-fig { grid-row: span 4; }
+    .register td.c-fig { grid-row: 1 / span 6; }
+    /* The project cell's pieces become rows of their own, so the "Open project" button can go last. */
+    .register td.c-proj { display: contents; }
+    .register .c-proj > *, .register td:not(.c-fig) { grid-column: 2; }
+    .register .open { order: 1; margin-top: 0.4rem; }
     .register td.c-field, .register td.c-year { font: 400 0.75rem/1.5 var(--mono); color: var(--muted); }
     .register td:empty { display: none; }
     .register tr.group { display: block; padding: 0; border: 0; }

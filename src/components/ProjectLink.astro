@@ -1,0 +1,14 @@
+---
+// The way into a project's own page from the lists. Project titles are plain text; this button is the link.
+// Shows nothing for projects without a page. The title is added for screen readers, so a list of
+// "Open project" links still says which project each one opens.
+import { projectUrl, type Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+const href = projectUrl(project);
+---
+
+{href && <a class="btn small" href={href}>Open project<span class="vh">: {project.data.title}</span> →</a>}
