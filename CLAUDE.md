@@ -92,8 +92,17 @@ npm run build    # must pass before committing
     `placeholder-*` folders, with cover figures; a small `thumbnail` for fly-fea; review fly-fea's new frontmatter
     (key numbers, caption) and the field names in `src/data/fields.ts`.
     Until this merges, don't run `npm run sync` on `main` (the old script there rewrites the frontmatter).
-  - Next: phase 4 (full testing: zoom, accessibility check, page weight) and phase 5 (remove `design/`,
-    final docs, PR from `rebuild` into `main`). Each phase approved separately.
+  - 2026-11-17: links shaded (teal tint; boxed buttons for actions; header tabs). Project titles are plain
+    text; a separate "Open project" button (`src/components/ProjectLink.astro`) links to projects with a page.
+  - Phase 4 done (2026-11-17): 7 pages x 36 window sizes, browser zoom 125-400 %, Windows scaling, browser
+    text size 150/200 % (set via Chrome's font-size setting): no sideways scroll, clipped, edge-touching or
+    overlapping text. axe-core WCAG 2.2 AA: no violations (light/dark, desktop/phone). Keyboard: every link
+    reachable with visible focus. Weight: home 127 KB, longest page (report) 472 KB. Fixes made: long words
+    break, label/value rows stack when text is large (`@media (max-width: 22em)`), single-column grids use
+    `minmax(0, 1fr)`, write-up tables focusable, default link-preview image on Home/Projects/About.
+    Note: Astro 7's default Markdown engine (Sätteri) does not take remark/rehype plugins without
+    installing `@astrojs/markdown-remark`; the table fix is a small script in `Article.astro` instead.
+  - Next: phase 5 (remove `design/`, final docs, PR from `rebuild` into `main`), on the owner's go-ahead.
 - Live on `main` (PR #1, merged): split-layout home page (About, Experience, Projects, Writing) built with PLACEHOLDER
   content. Combined with the teal design: teal header with Home / About / Projects tabs on every page,
   teal side panel with photo and background-image placeholders (`site.photo`, `site.heroImage`),

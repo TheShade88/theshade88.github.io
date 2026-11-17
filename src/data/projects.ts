@@ -29,3 +29,10 @@ export const projectUrl = (p: Project) => (hasPage(p) ? `/projects/${p.id}/` : u
 
 export const year = (p: Project) => p.data.date?.getFullYear();
 export const monthYear = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+
+// Link-preview image (LinkedIn etc.) for pages without one of their own: the newest featured project's
+// preview image, else its cover.
+export async function defaultPreview() {
+  const p = (await getProjects()).find((p) => p.data.featured && (p.data.preview || p.data.cover));
+  return p?.data.preview ?? p?.data.cover;
+}

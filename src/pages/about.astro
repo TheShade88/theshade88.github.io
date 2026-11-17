@@ -5,19 +5,20 @@ import Photo from '../components/Photo.astro';
 import Contact from '../components/Contact.astro';
 import { site, about, experience, education, skills } from '../data/site';
 import { fieldsInSentence } from '../data/fields';
-import { cvUrl } from '../data/files';
+import { cvUrl, photo } from '../data/files';
+import { defaultPreview } from '../data/projects';
 
 const sections = [experience.length && 'experience', education.length && 'education', skills.length && 'skills'].filter(Boolean);
 const num = (id: string) => sections.indexOf(id) + 1;
 ---
 
-<Base title="About" page="about" description={`About ${site.name}: ${site.role.toLowerCase()}.`}>
+<Base title="About" page="about" description={`About ${site.name}: ${site.role.toLowerCase()}.`} image={photo ?? (await defaultPreview())}>
   <div class="wrap">
     <section class="intro ruled">
       <div>
         <h1 class="page-title">About</h1>
         {about.map((p) => <p class="para">{p}</p>)}
-        <dl class="facts">
+        <dl class="facts stack-narrow">
           <dt>Fields</dt>
           <dd>{fieldsInSentence}</dd>
           <dt>Contact</dt>
@@ -79,7 +80,7 @@ const num = (id: string) => sections.indexOf(id) + 1;
 </Base>
 
 <style>
-  .intro { display: grid; gap: 1.5rem; padding: 2.5rem 0 3rem; }
+  .intro { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 2.5rem 0 3rem; }
   .photo { width: 9rem; order: -1; }
   @media (min-width: 48rem) {
     .intro { grid-template-columns: minmax(0, 1fr) 14rem; gap: 3rem; padding-top: 3.5rem; }
@@ -92,7 +93,7 @@ const num = (id: string) => sections.indexOf(id) + 1;
   .facts dd { margin: 0; }
 
   .items { list-style: none; margin: 0; padding: 0; }
-  .items li { display: grid; gap: 0.25rem 1.5rem; padding: 1rem 0; border-top: 1px solid var(--rule); }
+  .items li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.25rem 1.5rem; padding: 1rem 0; border-top: 1px solid var(--rule); }
   .items li:first-child { border-top: 0; padding-top: 0; }
   @media (min-width: 40rem) { .items li { grid-template-columns: 9rem minmax(0, 1fr); } }
   .when { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); padding-top: 0.2rem; font-variant-numeric: tabular-nums; }

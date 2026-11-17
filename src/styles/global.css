@@ -40,7 +40,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.0625rem/1.6 var(--sans); }
+/* overflow-wrap: a word too long for its column (large text on a phone) breaks instead of running off screen. */
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 1.0625rem/1.6 var(--sans); overflow-wrap: break-word; }
 /* Links: teal text on a light teal shade, with a thin underline, so they stand out from plain text.
    box-decoration-break keeps the shade's padding on every line when a link wraps. */
 a {
@@ -59,7 +60,7 @@ a:hover { background: var(--link-bg-hover); text-decoration-thickness: 2px; }
 .btn.small { font-size: 0.85rem; padding: 0.2em 0.65em; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 img { max-width: 100%; height: auto; }
-h1, h2, h3 { font-weight: 600; line-height: 1.25; }
+h1, h2, h3 { font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 figure { margin: 0; }
 
 /* Page width and side margins. Rules (.ruled) span the text width, not the window. */
@@ -78,7 +79,7 @@ figure { margin: 0; }
 .site-header .bar.no-brand { justify-content: flex-end; }
 /* Header links are tabs: shaded boxes; the current page is darker with a teal bar under it. */
 .brand, .nav a { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 3px; text-decoration: none; }
-.brand { font-weight: 600; color: var(--text); margin-left: -0.7rem; }
+.brand { font-weight: 600; color: var(--text); }
 .nav ul { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; margin: 0; padding: 0; }
 .nav a:hover { text-decoration: none; }
 .nav a[aria-current] { background: var(--link-bg-hover); color: var(--text); font-weight: 600; box-shadow: inset 0 -2px 0 var(--accent); }
@@ -130,6 +131,13 @@ figcaption b { font-family: var(--mono); font-weight: 500; color: var(--text); m
 .kv div { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: 1rem; padding: 0.5rem 0; border-top: 1px solid var(--rule); }
 .kv dt { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); padding-top: 0.2rem; }
 .kv dd { margin: 0; }
+
+/* Label-and-value rows stack when the window is narrow compared with the text size: on very small
+   phones, or when the reader has set large text in the browser. "em" in a media query follows the
+   browser's text-size setting, so normal phones keep the side-by-side layout. */
+@media (max-width: 22em) {
+  .kv div, .stack-narrow { grid-template-columns: minmax(0, 1fr) !important; gap: 0.15rem !important; }
+}
 
 /* ── Long-form text (project write-ups, reports) ────────────────────────── */
 .prose h1 { font-size: clamp(1.7rem, 4vw, 2.1rem); line-height: 1.2; margin: 0 0 1.5rem; letter-spacing: -0.01em; }

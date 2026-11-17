@@ -30,6 +30,12 @@ const props = Astro.props;
   </div>
 </Base>
 
+<script>
+  // Wide tables in write-ups scroll sideways on phones. tabindex lets keyboard users reach them
+  // and scroll with the arrow keys.
+  document.querySelectorAll<HTMLElement>('.prose table').forEach((t) => (t.tabIndex = 0));
+</script>
+
 <style>
   .article { max-width: 44rem; margin: 0 auto; padding: 2rem 0 4rem; }
   .crumbs { font-size: 0.9rem; color: var(--muted); margin-bottom: 2.5rem; }
