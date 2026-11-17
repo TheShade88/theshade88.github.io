@@ -70,7 +70,7 @@ printed address before testing against it.
 
 ## Status (keep this section current)
 
-- **Rebuild finished on branch `rebuild`; pull request into `main` open** (2026-11-17). Merging it publishes the
+- **Rebuild finished on branch `rebuild`; pull request #3 into `main` open** (2026-11-17). Merging it publishes the
   new site. The previous design stays in git history at 15936c5; the three design mockups made during the rebuild
   are at dae25b6 (`design/mockups/`). After the merge, start new work on a fresh branch from `main`.
 - **Design (owner's choices).** Home page is a summary (intro, selected work, in progress, About) with separate
