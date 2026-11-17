@@ -18,6 +18,10 @@ npm run dev      # live preview at http://localhost:4321, updates as you edit
 npm run build    # what GitHub runs; must pass before you commit
 ```
 
+Needs Node 22.23.4 or newer (GitHub builds with Node 24). On Windows PowerShell, if `npm` says running
+scripts is disabled, type `npm.cmd` instead, or allow your own scripts once with
+`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
+
 ## Where to edit what
 
 | What | Where |
