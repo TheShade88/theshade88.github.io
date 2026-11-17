@@ -89,8 +89,10 @@ npm run build    # must pass before committing
     folders demonstrate the layout and are to be replaced or deleted by the owner.
   - 2026-11-17: owner's text added to `src/data/site.ts` (role, intro, public email, About, experience, education,
     skills). Intro, About paragraphs and experience summary were reworded by Claude from the owner's notes and
-    carry a `DRAFT` comment; skills were regrouped. Open questions put to the owner: OK to name client
-    projects and vessels publicly; degree name as on the certificate; spell out SMC, T&I and WTG.
+    carry a `DRAFT` comment; skills were regrouped. Owner confirmed: personal email only; client project and
+    vessel names may stay; B.Tech; SMC = submarine cable, T&I = transport and installation (spelled out on the
+    site). The "Fields" line is `site.focus` (structural engineering, naval architecture, product design, cable lay);
+    `src/data/fields.ts` now starts with those disciplines. Owner reviewing a list of extra tools/standards to add.
   - Waiting on the owner: `src/assets/photo.jpg`; `public/cv.pdf`; real projects replacing the
     `placeholder-*` folders, with cover figures; a small `thumbnail` for fly-fea; review fly-fea's new frontmatter
     (key numbers, caption) and the field names in `src/data/fields.ts`.

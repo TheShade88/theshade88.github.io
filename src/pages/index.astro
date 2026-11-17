@@ -9,7 +9,6 @@ import Status from '../components/Status.astro';
 import Contact from '../components/Contact.astro';
 import ProjectLink from '../components/ProjectLink.astro';
 import { site, about, experience, education } from '../data/site';
-import { fieldsInSentence } from '../data/fields';
 import { getProjects, projectUrl, year, monthYear, defaultPreview } from '../data/projects';
 
 const projects = await getProjects();
@@ -40,7 +39,7 @@ const school = education[0];
         <p class="lede">{site.intro}</p>
         <dl class="facts stack-narrow">
           <dt>Fields</dt>
-          <dd>{fieldsInSentence}</dd>
+          <dd>{site.focus}</dd>
           <dt>Contact</dt>
           <dd><Contact /></dd>
         </dl>

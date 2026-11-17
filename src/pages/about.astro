@@ -4,7 +4,6 @@ import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
 import Contact from '../components/Contact.astro';
 import { site, about, experience, education, skills } from '../data/site';
-import { fieldsInSentence } from '../data/fields';
 import { cvUrl, photo } from '../data/files';
 import { defaultPreview } from '../data/projects';
 
@@ -20,7 +19,7 @@ const num = (id: string) => sections.indexOf(id) + 1;
         {about.map((p) => <p class="para">{p}</p>)}
         <dl class="facts stack-narrow">
           <dt>Fields</dt>
-          <dd>{fieldsInSentence}</dd>
+          <dd>{site.focus}</dd>
           <dt>Contact</dt>
           <dd><Contact /></dd>
         </dl>
