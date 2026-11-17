@@ -8,10 +8,14 @@ import Photo from '../components/Photo.astro';
 import Status from '../components/Status.astro';
 import Contact from '../components/Contact.astro';
 import ProjectLink from '../components/ProjectLink.astro';
+import SmallList from '../components/SmallList.astro';
 import { site, about, experience, education } from '../data/site';
-import { getProjects, projectUrl, year, monthYear, defaultPreview } from '../data/projects';
+import { getProjects, projectUrl, year, monthYear, defaultPreview, isSmall } from '../data/projects';
 
-const projects = await getProjects();
+const all = await getProjects();
+const projects = all.filter((p) => !isSmall(p));
+const smallAll = all.filter(isSmall);
+const small = smallAll.slice(0, site.smallProjectsOnHome);
 const reports = new Set((await getCollection('reports')).map((r) => r.id));
 
 // Selected work: featured built projects (newest first); the first one is shown large.
@@ -23,7 +27,7 @@ const ongoingAll = projects.filter((p) => p.data.status !== 'built');
 const ongoing = ongoingAll.slice(0, 5);
 
 // Section numbers follow whichever sections have content.
-const sections = [lead && 'work', ongoing.length && 'ongoing', 'about'].filter(Boolean);
+const sections = [lead && 'work', ongoing.length && 'ongoing', small.length && 'small', 'about'].filter(Boolean);
 const num = (id: string) => sections.indexOf(id) + 1;
 
 const [now, before] = experience;
@@ -114,6 +118,10 @@ const school = education[0];
             ))}
           </div>
         )}
+
+        {small.length === 0 && smallAll.length > 0 && (
+          <p class="also"><a class="btn" href="/projects/#small">Also: {smallAll.length} small projects →</a></p>
+        )}
       </div>
     </section>
   )}
@@ -141,6 +149,18 @@ const school = education[0];
             ))}
           </tbody>
         </table>
+      </div>
+    </section>
+  )}
+
+  {small.length > 0 && (
+    <section class="wrap" id="small" aria-labelledby="small-title">
+      <div class="sec ruled">
+        <div class="sec-head">
+          <h2 id="small-title"><span class="n">{num('small')}</span>Small projects</h2>
+          <a class="btn" href="/projects/#small">{smallAll.length > small.length ? `All ${smallAll.length} →` : 'On the Projects page →'}</a>
+        </div>
+        <SmallList projects={small} />
       </div>
     </section>
   )}
@@ -198,6 +218,7 @@ const school = education[0];
   .grid .summary { color: var(--muted); }
   .grid .result { margin-top: 0.35rem; }
   .grid .open { margin-top: 0.75rem; }
+  .also { margin: 2.5rem 0 0; }
 
   /* In-progress list: a table on wide screens, stacked rows on phones. */
   .list { width: 100%; border-collapse: collapse; }

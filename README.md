@@ -69,6 +69,28 @@ rewrite. Missing images show a labelled placeholder box.
 
 The newest featured project is shown large on the home page; the next three featured ones below it.
 
+### Small projects
+
+Smaller pieces of work get a lighter listing: under "Small projects" on the Projects page, with a very
+small thumbnail. The home page shows a link to them; set `smallProjectsOnHome` in `src/data/site.ts`
+to a number (e.g. 5) to list that many there instead. Make one like any project, with `small: true` and,
+if the work lives elsewhere, a `link`:
+
+```yaml
+---
+title: "Small tool"
+summary: "One line on what it is or does."
+status: built
+fields: ["Engineering automation"]
+date: "2026-03-01"                 # optional
+small: true
+link: "https://github.com/..."     # optional: repo, video or post it opens
+thumbnail: "./thumb.png"           # optional: small square image next to index.md
+---
+```
+
+To promote a small project to a main one, delete `small: true` and fill in the other entries.
+
 ### Projects whose write-up lives in another repo
 
 List them in `scripts/sync-projects.mjs` and run `npm run sync` on the laptop. Sync copies the

@@ -23,6 +23,8 @@ const projects = defineCollection({
       // Small table of key numbers, shown when the project is the lead project on the home page.
       numbers: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
       featured: z.boolean().default(false), // show under "Selected work" on the home page
+      small: z.boolean().default(false), // a small project: listed under "Small projects", not in the main table
+      link: z.string().url().optional(), // for small projects: a repo, video or post to open (if it has no page here)
       // Images: paths relative to index.md, e.g. ./figures/plot.png. Astro resizes them at build time.
       cover: image().optional(), // the project's main figure; a labelled placeholder shows until it is set
       coverAlt: z.string().optional(), // describes the cover for screen readers

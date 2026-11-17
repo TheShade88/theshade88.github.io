@@ -20,6 +20,9 @@ export const site = {
   description:
     'Project engineer in marine and offshore cable lay: vessel conversions, hull structural analysis, naval architecture and cable lay equipment design.',
 
+  // How many small projects the home page lists, newest first. 0 shows only a link to them.
+  smallProjectsOnHome: 0,
+
   email: 'sujeetpalanisamy2@gmail.com',
   links: {
     linkedin: 'https://www.linkedin.com/in/sujeet-palanisamy-622b4a257/',

@@ -4,19 +4,22 @@ import Base from '../../layouts/Base.astro';
 import Cover from '../../components/Cover.astro';
 import Status from '../../components/Status.astro';
 import ProjectLink from '../../components/ProjectLink.astro';
+import SmallList from '../../components/SmallList.astro';
 import { fields } from '../../data/fields';
-import { getProjects, projectUrl, year, statusLabel, defaultPreview } from '../../data/projects';
+import { getProjects, projectUrl, year, statusLabel, defaultPreview, isSmall } from '../../data/projects';
 
 const projects = await getProjects();
+const main = projects.filter((p) => !isSmall(p));
+const small = projects.filter(isSmall);
 const groups = (['built', 'in-progress', 'planned'] as const)
-  .map((status) => ({ status, items: projects.filter((p) => p.data.status === status) }))
+  .map((status) => ({ status, items: main.filter((p) => p.data.status === status) }))
   .filter((g) => g.items.length > 0);
 // One filter button per field that has projects, in the order of src/data/fields.ts.
 const counts = fields
   .map((field) => ({ field, n: projects.filter((p) => p.data.fields.includes(field)).length }))
   .filter((c) => c.n > 0);
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLowerCase()}`).join(', ');
+const tally = [...groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLowerCase()}`), ...(small.length ? [`${small.length} small`] : [])].join(', ');
 ---
 
 <Base title="Projects" page="projects" description="Engineering projects: built, in progress and planned." image={await defaultPreview()}>
@@ -69,6 +72,13 @@ const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLow
         </tbody>
       ))}
     </table>
+
+    {small.length > 0 && (
+      <section class="small-sec" id="small" aria-labelledby="small-title">
+        <h2 id="small-title">Small projects</h2>
+        <SmallList projects={small} filterable />
+      </section>
+    )}
   </div>
 </Base>
 
@@ -79,12 +89,13 @@ const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLow
   if (bar) {
     bar.hidden = false;
     const buttons = [...bar.querySelectorAll<HTMLButtonElement>('button')];
-    const groups = [...document.querySelectorAll<HTMLElement>('.register tbody')];
+    // Each group is a block of rows: a status group in the main table, or the small-projects section.
+    const groups = [...document.querySelectorAll<HTMLElement>('.register tbody, .small-sec')];
     const show = (field: string) => {
       buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.field === field)));
       for (const g of groups) {
         let any = false;
-        g.querySelectorAll<HTMLElement>('tr[data-fields]').forEach((row) => {
+        g.querySelectorAll<HTMLElement>('[data-fields]').forEach((row) => {
           const match = !field || row.dataset.fields!.split(' ').includes(field);
           row.hidden = !match;
           any ||= match;
@@ -117,7 +128,10 @@ const tally = groups.map((g) => `${g.items.length} ${statusLabel[g.status].toLow
   .filters button:hover { background: var(--link-bg-hover); }
   .filters button[aria-pressed='true'] { color: var(--text); font-weight: 600; background: var(--link-bg-hover); border-color: var(--link-border); }
 
-  .register { width: 100%; border-collapse: collapse; margin: 0.5rem 0 4rem; }
+  .register { width: 100%; border-collapse: collapse; margin: 0.5rem 0 3rem; }
+  .small-sec { margin: 0 0 4rem; }
+  .small-sec h2 { font-size: 1.25rem; margin: 0 0 1rem; }
+  .small-sec[hidden] { display: none; }
   .register thead th {
     font: 400 0.78rem/1.4 var(--mono); color: var(--muted); text-align: left;
     padding: 0.75rem 1.25rem 0.5rem 0; border-bottom: 1px solid var(--rule-strong);

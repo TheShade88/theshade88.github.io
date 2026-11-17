@@ -28,6 +28,11 @@ export const hasPage = (p: Project) => Boolean(p.body?.trim());
 export const projectUrl = (p: Project) => (hasPage(p) ? `/projects/${p.id}/` : undefined);
 
 export const year = (p: Project) => p.data.date?.getFullYear();
+
+// Small projects are listed separately ("Small projects"); everything else is a main project.
+export const isSmall = (p: Project) => p.data.small;
+// Where a small project's button goes: its own page if it has one, else its link.
+export const smallUrl = (p: Project) => projectUrl(p) ?? p.data.link;
 export const monthYear = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
 
 // Link-preview image (LinkedIn etc.) for pages without one of their own: the newest featured project's

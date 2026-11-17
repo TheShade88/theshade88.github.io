@@ -37,7 +37,7 @@ rewrite them. Never invent facts about the owner's experience.
 | About page | `src/pages/about.astro` |
 | Write-up and report pages | `src/pages/projects/[id]/`, layout `src/layouts/Article.astro` |
 | Page frame: head, header links, footer, link-preview image | `src/layouts/Base.astro` |
-| Shared pieces: figure or placeholder, photo, status mark, contact links | `src/components/` |
+| Shared pieces: figure or placeholder, photo, status mark, contact links, "Open project" button, small-projects list | `src/components/` |
 | Colours (teal, light and dark, at the top), shared styles, long-form text styles | `src/styles/global.css` |
 | Redirects (`/writing` goes home) | `astro.config.mjs` |
 | Design mockups from the rebuild (to be removed before the PR) | `design/mockups/` |
@@ -46,7 +46,7 @@ rewrite them. Never invent facts about the owner's experience.
 ## Projects and `npm run sync`
 
 Every project is a folder `src/content/projects/<id>/` with `index.md`: frontmatter (title, summary, status,
-fields, optional date, result, numbers, featured, cover, thumbnail, preview, tags, repo) and optional write-up
+fields, optional date, result, numbers, featured, small, link, cover, thumbnail, preview, tags, repo) and optional write-up
 text below it. No text: listed, no page. Optional `report.md` and `figures/`. README "Add a project" has the
 full example. The build validates the frontmatter against `src/content.config.ts`.
 
@@ -98,9 +98,10 @@ printed address before testing against it.
     site). The "Fields" line is `site.focus` (structural engineering, naval architecture, product design, cable lay);
     `src/data/fields.ts` now starts with those disciplines. Two "Standards" skill groups added at the owner's request
     from Claude's list (DRAFT: owner to remove any not worked to). Owner reviewing a list of extra software.
-  - Small projects: built as a preview, not yet committed (owner choosing home option A = list up to 5, or B = link
-    only). Design: a project with `small: true` (+ optional `link`), listed in a compact list with very small
-    thumbnails under "Small projects" on the Projects page (filter covers it) and per `site.smallProjectsOnHome`.
+  - Small projects (2026-11-17, owner chose option B): a project with `small: true` (+ optional `link`) is left out
+    of the main lists and shown in a compact list with very small thumbnails under "Small projects" on the Projects
+    page (the field filter covers it). Home shows only an "Also: N small projects" button
+    (`site.smallProjectsOnHome: 0`; a number lists that many instead). Three `placeholder-small-*` folders.
   - Waiting on the owner: `src/assets/photo.jpg`; `public/cv.pdf`; real projects replacing the
     `placeholder-*` folders, with cover figures; a small `thumbnail` for fly-fea; review fly-fea's new frontmatter
     (key numbers, caption) and the field names in `src/data/fields.ts`.
