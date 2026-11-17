@@ -69,4 +69,7 @@ export const skills: { group: string; items: string[] }[] = [
   { group: 'Naval architecture', items: ['GHS', 'MARS'] },
   { group: 'Code and AI', items: ['Python', 'Claude Code', 'Codex', 'Agentic engineering with LLMs'] },
   { group: 'Other', items: ['Blender', 'DaVinci Resolve', 'Game design', 'Video editing'] },
+  // DRAFT: added at the owner's request from Claude's list (2026-11-17). Owner to remove any not worked to.
+  { group: 'Standards: marine', items: ['DNV-ST-N001', 'IMCA guidance', 'DNV-ST-0359', 'DNV-RP-0360', 'CIGRE TB 623'] },
+  { group: 'Standards: structural', items: ['DNV-ST-0378', 'LR CLAME', 'DNV-RP-C203', 'Eurocode 3', 'AISC 360', 'AWS D1.1'] },
 ];

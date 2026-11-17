@@ -64,6 +64,10 @@ npm run dev      # local preview at http://localhost:4321 (use `astro dev --back
 npm run build    # must pass before committing
 ```
 
+`astro preview` (serves the built `dist/`) runs as a background service in Astro 7: stop it with
+`npx astro preview stop` from the same folder. If port 4321 is taken it silently starts on 4322, so check the
+printed address before testing against it.
+
 ## Status (keep this section current)
 
 - **Rebuild in progress on branch `rebuild`** (started 2026-11-13; the old design stays in `main` at 15936c5).
@@ -92,7 +96,11 @@ npm run build    # must pass before committing
     carry a `DRAFT` comment; skills were regrouped. Owner confirmed: personal email only; client project and
     vessel names may stay; B.Tech; SMC = submarine cable, T&I = transport and installation (spelled out on the
     site). The "Fields" line is `site.focus` (structural engineering, naval architecture, product design, cable lay);
-    `src/data/fields.ts` now starts with those disciplines. Owner reviewing a list of extra tools/standards to add.
+    `src/data/fields.ts` now starts with those disciplines. Two "Standards" skill groups added at the owner's request
+    from Claude's list (DRAFT: owner to remove any not worked to). Owner reviewing a list of extra software.
+  - Small projects: built as a preview, not yet committed (owner choosing home option A = list up to 5, or B = link
+    only). Design: a project with `small: true` (+ optional `link`), listed in a compact list with very small
+    thumbnails under "Small projects" on the Projects page (filter covers it) and per `site.smallProjectsOnHome`.
   - Waiting on the owner: `src/assets/photo.jpg`; `public/cv.pdf`; real projects replacing the
     `placeholder-*` folders, with cover figures; a small `thumbnail` for fly-fea; review fly-fea's new frontmatter
     (key numbers, caption) and the field names in `src/data/fields.ts`.
