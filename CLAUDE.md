@@ -1,7 +1,7 @@
 # CLAUDE.md: read first
 
-Personal portfolio site of Sujeet Palanisamy (mechanical / FEA engineer; projects in LLMs, engineering
-automation and structural optimisation). Astro 7 static site, deployed to GitHub Pages at
+Personal portfolio site of Sujeet Palanisamy (project engineer in marine and offshore cable lay at Dimension
+Consultants; projects in FEA, naval architecture, cable engineering, engineering automation and LLMs). Astro 7 static site, deployed to GitHub Pages at
 https://theshade88.github.io from the `main` branch.
 
 This repo is worked on from a laptop **and from Claude on a phone (cloud sessions)**. Anything a session
@@ -87,8 +87,11 @@ npm run build    # must pass before committing
     scroll or clipping at 12 window sizes (320 px phone to 2560x1440), light and dark.
     **Owner's choice: placeholders stay visible on the live site for now**; seven `placeholder-*` project
     folders demonstrate the layout and are to be replaced or deleted by the owner.
-  - Waiting on the owner (list given 2026-11-16): real text in `src/data/site.ts` (role, DRAFT intro, email,
-    About, experience, education, skills); `src/assets/photo.jpg`; `public/cv.pdf`; real projects replacing the
+  - 2026-11-17: owner's text added to `src/data/site.ts` (role, intro, public email, About, experience, education,
+    skills). Intro, About paragraphs and experience summary were reworded by Claude from the owner's notes and
+    carry a `DRAFT` comment; skills were regrouped. Open questions put to the owner: OK to name client
+    projects and vessels publicly; degree name as on the certificate; spell out SMC, T&I and WTG.
+  - Waiting on the owner: `src/assets/photo.jpg`; `public/cv.pdf`; real projects replacing the
     `placeholder-*` folders, with cover figures; a small `thumbnail` for fly-fea; review fly-fea's new frontmatter
     (key numbers, caption) and the field names in `src/data/fields.ts`.
     Until this merges, don't run `npm run sync` on `main` (the old script there rewrites the frontmatter).
