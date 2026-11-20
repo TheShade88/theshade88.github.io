@@ -1,30 +1,33 @@
 ---
-import { getEntry, render } from 'astro:content';
+// A project's write-up page, for every project whose index.md has text below the frontmatter.
+import { getCollection, render } from 'astro:content';
 import Article from '../../../layouts/Article.astro';
-import { getProjects, monthYear } from '../../../data/content';
+import Status from '../../../components/Status.astro';
+import { getProjects, hasPage, monthYear, type Project } from '../../../data/projects';
 
 export async function getStaticPaths() {
-  const projects = await getProjects();
+  const projects = (await getProjects()).filter(hasPage);
   return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
 }
 
-const { project } = Astro.props;
-const { title, summary, date, repo, image, tags } = project.data;
-const report = await getEntry('reports', project.id);
+const { project } = Astro.props as { project: Project };
+const { title, summary, date, repo, cover, preview, tags, fields, status } = project.data;
+const report = (await getCollection('reports')).find((r) => r.id === project.id);
 const { Content } = await render(project);
 ---
 
-<Article title={title} description={summary} image={image}>
-  <p slot="meta" class="meta">
-    <span>{monthYear(date)}</span>
-    {report && <a href={`/projects/${project.id}/report/`}>Technical report</a>}
-    {repo && <a href={repo}>Code</a>}
-    {tags.length > 0 && <span class="mono">{tags.join(' · ')}</span>}
+<Article title={title} description={summary} image={preview ?? cover}>
+  <p slot="meta" class="meta top">
+    <span>{fields.join(' · ')}</span>
+    {date && <span>{monthYear(date)}</span>}
+    <Status status={status} />
+    {report && <a class="btn" href={`/projects/${project.id}/report/`}>Technical report</a>}
+    {repo && <a class="btn" href={repo}>Code</a>}
+    {tags.length > 0 && <span>Tools: {tags.join(', ')}</span>}
   </p>
   <Content />
 </Article>
 
 <style>
-  .meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; font-size: 0.85rem; color: var(--muted); margin: 0 0 0.75rem; }
-  .meta .mono { font-size: 0.78rem; color: var(--accent); }
+  .top { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.25rem; margin-bottom: 1rem; }
 </style>

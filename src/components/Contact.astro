@@ -1,0 +1,22 @@
+---
+// Email · LinkedIn · GitHub · CV. Email and CV show as placeholders until they are set
+// (email in src/data/site.ts, CV as public/cv.pdf).
+import { site } from '../data/site';
+import { cvUrl } from '../data/files';
+---
+
+<span class="contact">
+  {site.email ? <a href={`mailto:${site.email}`}>Email</a> : <span class="todo">Email (placeholder)</span>}
+  <span class="sep" aria-hidden="true">·</span>
+  <a href={site.links.linkedin}>LinkedIn</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href={site.links.github}>GitHub</a>
+  <span class="sep" aria-hidden="true">·</span>
+  {cvUrl ? <a href={cvUrl}>CV (PDF)</a> : <span class="todo">CV (placeholder)</span>}
+</span>
+
+<style>
+  /* Each item wraps as a whole on narrow screens; the dots stay between items, outside the link shades. */
+  .contact { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.4rem; }
+  .sep { color: var(--muted); }
+</style>

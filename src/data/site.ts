@@ -1,42 +1,48 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// All the content on the home page lives in this file.
-// Edit the text here; the page layout picks it up automatically.
-// Anything marked PLACEHOLDER is example content to replace.
-// Empty strings and empty lists are simply not shown.
+// Your personal content: name, intro, contact, About page.
+// Projects are not here: each project is a folder in src/content/projects/ (see README).
+//
+// Anything marked PLACEHOLDER is example content to replace. A "DRAFT" comment marks text that
+// Claude reworded from your notes (2026-11-17): the facts are yours, the wording is for you to check.
+// Your photo and CV are files, not settings: see src/data/files.ts.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const site = {
   name: 'Sujeet Palanisamy',
-  role: 'Mechanical / FEA Engineer', // PLACEHOLDER: your title
-  tagline: 'I automate structural analysis with code and language models.', // PLACEHOLDER: one line
-  // Shown in search results and link previews.
-  description: 'Mechanical engineer. Finite element analysis, structural optimisation, and automation.',
+  role: 'Project Engineer',
+  // One or two sentences under your name on the home page.
+  // DRAFT: your intro, stated as what you do.
+  intro:
+    "I'm a project engineer in the marine and offshore cable lay industry. I do the engineering analysis, design equipment and products, design hulls and vessel modifications, and manage submarine cable transport and installation (T&I) work.",
+  // The "Fields" line under the intro, on the home and About pages.
+  focus: 'Structural engineering, naval architecture and product design, specialising in the cable lay industry.',
+  // Shown in search results and link previews. DRAFT.
+  description:
+    'Project engineer in marine and offshore cable lay: vessel conversions, hull structural analysis, naval architecture and cable lay equipment design.',
 
-  // Square photo at public/photo.jpg, then set to '/photo.jpg'. Leave '' to show a placeholder.
-  photo: '',
-  // Background for the side panel on the home page, e.g. '/hero.jpg' in public/.
-  // Leave '' to show the blueprint grid placeholder. A teal tint keeps the text readable.
-  heroImage: '',
+  // How many small projects the home page lists, newest first. 0 shows only a link to them.
+  smallProjectsOnHome: 0,
 
-  email: '', // the address you want public
+  email: 'sujeetpalanisamy2@gmail.com',
   links: {
     linkedin: 'https://www.linkedin.com/in/sujeet-palanisamy-622b4a257/',
     github: 'https://github.com/TheShade88',
   },
-  // Resume PDF at public/resume.pdf, then set to '/resume.pdf'. Leave '' for none.
-  resume: '',
 };
 
-// About section: one string per paragraph.
+// About page, one string per paragraph. The first paragraph is also shown on the home page.
+// DRAFT: written from your notes; nothing added that you didn't tell me.
 export const about = [
-  'PLACEHOLDER. Who you are and what you work on, in two or three sentences.',
-  'PLACEHOLDER. Where you work now or what you have done most recently, and what you are good at.',
-  'PLACEHOLDER. What you are looking for or curious about next. Optional.',
+  "I'm a project engineer at Dimension Consultants, working in the marine and offshore cable lay market. I studied mechanical engineering at IIT Madras (B.Tech, 2024).",
+  'Most of my work is converting existing vessels into cable lay vessels and barges. On these projects I do the hull structural analysis and naval architecture studies, and I design the cable lay equipment and check its structure. I supported the project management and class approval for two conversion studies: GL2030, and SFE Adventurer (now DC Eltron).',
+  'I also manage packages and work on site. I was lead package manager for the ANMA submarine cable transport and installation (T&I) project. I have supported the installation of cable lay equipment on site, and for a short time I was a field engineer on the TPC II power cable project in Taiwan, working on wind turbine cable pull-ins.',
+  'I also write software, mostly in Python, and work with LLM coding agents such as Claude Code and Codex. Outside engineering, I do game design and video editing.',
 ];
 
-// Experience, newest first.
+// Experience, newest first. The first two also appear on the home page.
+// Write dates like '2024 – Present'; an entry whose dates end in 'Present' is labelled "Now" on the home page.
 export const experience: {
-  dates: string; // e.g. '2023 — Present'
+  dates: string;
   role: string;
   company: string;
   url?: string; // company website, optional
@@ -44,42 +50,29 @@ export const experience: {
   skills?: string[];
 }[] = [
   {
-    dates: '2024 — Present',
-    role: 'PLACEHOLDER Role',
-    company: 'Company',
-    summary: 'PLACEHOLDER. Two lines on what you did and the result, with a number if you have one.',
-    skills: ['FEA', 'Python'],
-  },
-  {
-    dates: '2022 — 2024',
-    role: 'PLACEHOLDER Role',
-    company: 'Company',
-    summary: 'PLACEHOLDER. Two lines on what you did and the result.',
-    skills: ['CAD', 'Testing'],
+    dates: '2024 – Present',
+    role: 'Project Engineer',
+    company: 'Dimension Consultants',
+    // DRAFT: from your notes.
+    summary:
+      'Vessel conversions to cable lay vessels and barges: hull structural analysis, naval architecture studies, and design and structural analysis of cable lay equipment. Supported project management and class approval for two conversion studies (GL2030; SFE Adventurer, now DC Eltron). Lead package manager for the ANMA submarine cable transport and installation (T&I) project. Supported cable lay equipment installation on site, and worked as a field engineer on wind turbine cable pull-ins for the TPC II project in Taiwan.',
+    skills: ['Hull structural analysis', 'Naval architecture', 'Equipment design', 'Class approval', 'Package management', 'Field engineering'],
   },
 ];
 
+// Education, newest first. The first one also appears on the home page.
 export const education: { dates: string; degree: string; school: string; note?: string }[] = [
-  { dates: '2018 — 2022', degree: 'PLACEHOLDER Degree', school: 'University' },
+  { dates: '2020 – 2024', degree: 'B.Tech in Mechanical Engineering', school: 'Indian Institute of Technology Madras' },
 ];
 
 // Skills, grouped. Keep each list short and honest.
 export const skills: { group: string; items: string[] }[] = [
-  { group: 'Simulation', items: ['PLACEHOLDER', 'CalculiX', 'Femap'] },
-  { group: 'Code', items: ['Python', 'PLACEHOLDER'] },
-  { group: 'AI', items: ['LLM agents', 'PLACEHOLDER'] },
+  { group: 'CAD', items: ['SolidWorks', 'Solid Edge', 'AutoCAD'] },
+  { group: 'Analysis', items: ['FEMAP', 'OrcaFlex'] },
+  { group: 'Naval architecture', items: ['GHS', 'MARS'] },
+  { group: 'Code and AI', items: ['Python', 'Claude Code', 'Codex', 'Agentic engineering with LLMs'] },
+  { group: 'Other', items: ['Blender', 'DaVinci Resolve', 'Game design', 'Video editing'] },
+  // DRAFT: added at the owner's request from Claude's list (2026-11-17). Owner to remove any not worked to.
+  { group: 'Standards: marine', items: ['DNV-ST-N001', 'IMCA guidance', 'DNV-ST-0359', 'DNV-RP-0360', 'CIGRE TB 623'] },
+  { group: 'Standards: structural', items: ['DNV-ST-0378', 'LR CLAME', 'DNV-RP-C203', 'Eurocode 3', 'AISC 360', 'AWS D1.1'] },
 ];
-
-// Smaller projects that don't have a full write-up page.
-// Projects WITH a write-up come from src/content/projects/ (see README).
-export const moreProjects: { title: string; summary: string; url?: string; tags?: string[]; year?: string }[] = [
-  {
-    title: 'PLACEHOLDER project',
-    summary: 'Two lines on what it does and why it is interesting.',
-    tags: ['LLM', 'Automation'],
-    year: '2026',
-  },
-];
-
-// Writing: posts on other platforms or on this site, newest first.
-export const writing: { year: string; title: string; url: string }[] = [];

@@ -1,0 +1,21 @@
+---
+// Your photo, or a placeholder until src/assets/photo.jpg exists (see src/data/files.ts).
+import { Image } from 'astro:assets';
+import { photo } from '../data/files';
+import { site } from '../data/site';
+
+interface Props {
+  sizes: string; // how wide the photo is shown
+}
+const { sizes } = Astro.props;
+---
+
+{
+  photo ? (
+    <Image src={photo} alt={`Photo of ${site.name}`} widths={[240, 480, 720]} sizes={sizes} loading="eager" class="photo-img" />
+  ) : (
+    <div class="ph" style="aspect-ratio: 4 / 5" role="img" aria-label="Photo placeholder">
+      <span>Photo</span>
+    </div>
+  )
+}

@@ -1,0 +1,11 @@
+---
+// Built / In progress / Planned, with a full, half or empty circle.
+import { statusLabel, type Status } from '../data/projects';
+
+interface Props {
+  status: Status;
+}
+const { status } = Astro.props;
+---
+
+<span class={`st st-${status}`}>{statusLabel[status]}</span>

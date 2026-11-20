@@ -1,10 +1,25 @@
 ---
+# This block is owned by the site repo. `npm run sync` replaces only the text below it.
 title: "What a fruit fly's taste buds can tell you about steel"
 summary: "A simulated fruit-fly brain, used unchanged, sizes the steel members of an offshore wind-turbine jacket."
+status: built
+fields: ["FEA", "Structural optimisation"]
 date: "2026-10-01"
-tags: ["FEA","Optimisation","Connectome","Python","CalculiX"]
-metric: "Reached the best-known 339 t design from 4 of 4 starts"
-image: "/og/fly-fea.png"
+result: "Reached the best-known 339 t design from 4 of 4 starts"
+# REVIEW: key numbers taken from the technical report's abstract.
+numbers:
+  - value: "339 t"
+    label: "Best-known jacket design, reached from 4 of 4 starts"
+  - value: "9–69"
+    label: "Finite-element analyses per run. Differential evolution needed 1,796."
+  - value: "2.1 M"
+    label: "Possible designs across 7 member groups"
+featured: true
+cover: "./figures/jacket_utilisation.png"
+coverAlt: "Offshore wind-turbine jacket with each steel member coloured by how close it is to its design limit"
+caption: "The 339 t jacket, each member coloured by utilisation under the worst of four load cases."
+preview: "./figures/loop_diagram.png"
+tags: ["Python", "CalculiX", "Connectome"]
 ---
 
 # What a fruit fly's taste buds can tell you about steel

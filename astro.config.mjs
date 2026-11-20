@@ -8,10 +8,9 @@ const owner = process.env.GITHUB_REPOSITORY_OWNER;
 // https://astro.build/config
 export default defineConfig({
   site: owner ? `https://${owner.toLowerCase()}.github.io` : 'http://localhost:4321',
-  // Older separate pages now live as sections of the home page; keep their links working.
+  // /about and /projects are real pages again. /writing had its own page once; there is no writing yet,
+  // so it goes to the home page rather than a "not found" page.
   redirects: {
-    '/about': '/#about',
-    '/writing': '/#writing',
-    '/projects': '/#projects',
+    '/writing': '/',
   },
 });

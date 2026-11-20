@@ -1,0 +1,66 @@
+---
+// Compact list of small projects: a very small thumbnail, title, one line, field and year, and an
+// "Open" button when there is a page or a link. Used on the home page and the Projects page.
+import { Image } from 'astro:assets';
+import { smallUrl, year, projectUrl, type Project } from '../data/projects';
+
+interface Props {
+  projects: Project[];
+  filterable?: boolean; // add data-fields for the Projects page filter
+}
+const { projects, filterable = false } = Astro.props;
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+
+<ul class="small-list">
+  {projects.map((p) => {
+    const thumb = p.data.thumbnail ?? p.data.cover;
+    const href = smallUrl(p);
+    const external = href && !projectUrl(p);
+    return (
+      <li data-fields={filterable ? p.data.fields.map(slug).join(' ') : undefined}>
+        {thumb ? (
+          <Image src={thumb} alt="" widths={[64, 128]} sizes="3rem" class="thumb" />
+        ) : (
+          <span class="thumb ph" role="img" aria-label="Image placeholder"></span>
+        )}
+        <div class="text">
+          <span class="title">{p.data.title}</span>
+          <span class="sub">{p.data.summary}</span>
+          <span class="meta">{p.data.fields.join(', ')}{year(p) && <> · {year(p)}</>}</span>
+        </div>
+        {href && (
+          <a class="btn small" href={href} {...(external ? { rel: 'noopener' } : {})}>
+            Open<span class="vh">: {p.data.title}</span> {external ? '↗' : '→'}
+          </a>
+        )}
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  /* --t: thumbnail size; it stays small even when the reader enlarges the text. */
+  .small-list { --t: min(3rem, 14vw); list-style: none; margin: 0; padding: 0; }
+  .small-list li {
+    display: grid; grid-template-columns: var(--t) minmax(0, 1fr) auto; gap: 0.2rem 1rem; align-items: start;
+    padding: 0.8rem 0; border-bottom: 1px solid var(--rule);
+  }
+  .small-list li:first-child { border-top: 1px solid var(--rule); }
+  .small-list :global(.thumb) { display: block; width: var(--t); height: var(--t); object-fit: cover; border-radius: 2px; border: 1px solid var(--rule); background: var(--plate); }
+  .small-list :global(.thumb.ph) {
+    padding: 0; border: 1px dashed var(--rule-strong);
+    background: repeating-linear-gradient(135deg, transparent 0 5px, var(--hatch) 5px 6px);
+  }
+  .text { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
+  .title { font-weight: 600; }
+  .sub { color: var(--muted); font-size: 0.93rem; }
+  .meta { margin: 0.15rem 0 0; }
+  .btn { align-self: center; }
+  /* Narrow screens: the button moves under the text. */
+  @media (max-width: 40rem) {
+    .small-list li { grid-template-columns: var(--t) minmax(0, 1fr); }
+    .btn { grid-column: 2; justify-self: start; margin-top: 0.4rem; }
+  }
+  [hidden] { display: none !important; }
+</style>
